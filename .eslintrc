@@ -1,0 +1,11 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2020, // 또는 6 이상으로 설정
+    "sourceType": "module" // ECMAScript 모듈을 사용하기 위해 설정
+  },
+  "env": {
+    "es6": true, // ECMAScript 6의 전역 변수 활성화
+    "browser": true, // 브라우저 환경에서의 전역 변수 활성화
+    "node": true // Node.js 환경에서의 전역 변수 활성화
+  }
+}
