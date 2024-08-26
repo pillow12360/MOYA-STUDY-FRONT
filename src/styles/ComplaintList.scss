@@ -1,0 +1,72 @@
+@import 'common';
+
+.complaint-list-container {
+  // @extend %container-style ;
+  
+  position: fixed; // 화면에 고정
+  top: 45%; // 상단에서 50% 위치
+  left: 50%; // 왼쪽에서 50% 위치
+  transform: translate(-50%, -50%); // 정확한 중앙 정렬을 위해 변환
+  width: 80vi; // 컨테이너 너비
+  max-height: 70vh; // 전체 화면 높이의 80%
+  overflow-y: auto; // 세로 스크롤
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.95); // 반투명 배경
+  backdrop-filter: blur(10px); // 배경 블러 효과
+  border-radius: 10px; // 모서리 둥글게
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); // 그림자 효과
+
+  h1 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .complaint {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    p {
+      margin: 5px 0;
+    }
+    // 상태별 스타일 정의
+    &.accepting { background-color: #f0f0f0; }
+    &.received { background-color: #ffffe0; }
+    &.in_progress { background-color: #add8e6; }
+    &.completed { background-color: #90ee90; }
+    &.unresolvable { background-color: #ffcccb; }
+    &.deleted { // 삭제된 민원에 대한 스타일 추가
+      background-color: #ffcccc; // 빨간색 배경
+      color: #000; // 텍스트 색상
+      .status-deleted { // 삭제된 상태 텍스트 스타일
+        color: #dc3545; // 빨간색
+        font-weight: bold;
+      }
+    }
+
+    // 상태 표시를 위한 추가적인 스타일
+    .status-indicator {
+      display: inline-block;
+      padding: 2px 5px;
+      border-radius: 5px;
+      font-size: 0.75em;
+      font-weight: bold;
+      color: #fff;
+
+      &.accepting { background-color: #007bff; }
+      &.received { background-color: #28a745; }
+      &.in_progress { background-color: #ffc107; }
+      &.completed { background-color: #17a2b8; }
+      &.unresolvable { background-color: #dc3545; }
+      
+    }
+  }
+}
+
