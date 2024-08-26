@@ -1,16 +1,12 @@
-import path from 'path';
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
-import webpack, { Configuration as WebpackConfiguration } from 'webpack';
-import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-
-interface Configuration extends WebpackConfiguration {
-  devServer?: WebpackDevServerConfiguration;
-}
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const webpack = require('webpack');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-const config: Configuration = {
+const config = {
   name: 'ict-project',
   mode: isDevelopment ? 'development' : 'production',
   devtool: !isDevelopment ? 'hidden-source-map' : 'eval',
@@ -66,19 +62,20 @@ const config: Configuration = {
   plugins: [
     new ForkTsCheckerWebpackPlugin({
       async: false,
-      // eslint: {
-      //   files: "./src/**/*",
-      // },
     }),
     new webpack.EnvironmentPlugin({ NODE_ENV: isDevelopment ? 'development' : 'production' }),
+    new HtmlWebpackPlugin({
+      template: './index.html', // 템플릿으로 사용할 HTML 파일 경로
+      filename: 'index.html', // 빌드 후 생성될 파일명
+    }),
   ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js',
-    publicPath: '/dist/',
+    publicPath: '/',
   },
   devServer: {
-    historyApiFallback: true, // react router
+    historyApiFallback: true,
     port: 3090,
     devMiddleware: { publicPath: '/dist/' },
     static: { directory: path.resolve(__dirname) },
@@ -90,4 +87,4 @@ if (isDevelopment && config.plugins) {
   config.plugins.push(new ReactRefreshWebpackPlugin());
 }
 
-export default config;
+module.exports = config;

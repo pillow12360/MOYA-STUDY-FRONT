@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve --env development",
-    "build": "cross-env NODE_ENV=production webpack"
+    "build": "cross-env NODE_ENV=production webpack",
+    "deploy": "npm run build && aws s3 sync ./dist s3://your-s3-bucket-name --delete"
   },
   "author": "pillow12360",
   "license": "MIT",
@@ -40,6 +41,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "fork-ts-checker-webpack-plugin": "^7.2.3",
+    "html-webpack-plugin": "^5.6.0",
     "prettier": "^2.2.1",
     "react-refresh": "^0.12.0",
     "sass": "^1.77.8",
