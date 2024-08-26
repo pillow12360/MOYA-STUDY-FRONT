@@ -82,7 +82,7 @@ const SignupForm: React.FC = () => {
     }
 
     try {
-      await axios.post(API_ROUTES.SIGNUP, userData);
+      await axios.post(API_ROUTES.SIGNUP, userData, { withCredentials: true });
       openModal(
         <>
           <h3>회원가입 완료</h3>
@@ -145,6 +145,14 @@ const SignupForm: React.FC = () => {
       </div>
       <button className={styles.btnSuccess} type="submit">
         회원가입 완료
+      </button>
+      <button
+        className={styles.button}
+        onClick={() => {
+          navigate('/login');
+        }}
+      >
+        로그인 페이지
       </button>
     </form>
   );

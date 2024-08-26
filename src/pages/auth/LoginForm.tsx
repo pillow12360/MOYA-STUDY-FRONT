@@ -52,8 +52,8 @@ const LoginForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} className={styles.LoginForm}>
       <div className={styles.loginHeader}>
-        ICT 지원실 민원 처리 <br />
-        로그인
+        ICT Project 2024.08 <br />
+        LOGIN
       </div>
       <div className={styles.formControl}>
         <label htmlFor="id">로그인</label>
@@ -79,6 +79,14 @@ const LoginForm: React.FC = () => {
       </div>
       <button className={styles.btnSuccess} type="submit">
         로그인
+      </button>
+      <button
+        className={styles.button}
+        onClick={() => {
+          navigate('/signup');
+        }}
+      >
+        회원가입 페이지
       </button>
     </form>
   );
