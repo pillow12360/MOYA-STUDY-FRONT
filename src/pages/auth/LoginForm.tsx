@@ -7,7 +7,7 @@ import { API_ROUTES } from '../../config/apiConfig';
 
 // LoginForm 컴포넌트의 타입 정의
 const LoginForm: React.FC = () => {
-  const [id, setId] = useState<string>(''); // 상태의 타입을 명시적으로 정의
+  const [email, setEmail] = useState<string>(''); // 상태의 타입을 명시적으로 정의
   const [password, setPassword] = useState<string>(''); // 상태의 타입을 명시적으로 정의
   const { openModal } = useModal(); // 모달 훅
   const navigate = useNavigate(); // 리디렉션 훅
@@ -18,7 +18,7 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
 
     // 입력 유효성 검사
-    if (!id || !password) {
+    if (!email || !password) {
       openModal(
         <>
           <h3>로그인 오류</h3>
@@ -30,7 +30,7 @@ const LoginForm: React.FC = () => {
 
     // 로그인 API 호출
     try {
-      await axios.post(API_ROUTES.LOGIN, { id: id, password: password });
+      await axios.post(API_ROUTES.LOGIN, { email: email, password: password }, { withCredentials: true });
       console.log('로그인 성공');
       openModal(
         <>
@@ -42,7 +42,7 @@ const LoginForm: React.FC = () => {
       openModal(
         <>
           <h3>로그인 실패</h3>
-          <p>잠시 후 다시 시도해주세요.</p>
+          <p>로그인 도중 에러가 발생하였습니다.</p>
         </>,
       );
       console.error(error);
@@ -56,14 +56,14 @@ const LoginForm: React.FC = () => {
         LOGIN
       </div>
       <div className={styles.formControl}>
-        <label htmlFor="id">로그인</label>
+        <label htmlFor="email">이메일</label>
         <input
           type="text"
-          id="id"
+          id="email"
           className={styles.formInput}
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-          placeholder="아이디 입력"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="email"
         />
       </div>
       <div className={styles.formControl}>
@@ -74,7 +74,7 @@ const LoginForm: React.FC = () => {
           className={styles.formInput}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호 입력"
+          placeholder="password"
         />
       </div>
       <button className={styles.btnSuccess} type="submit">
