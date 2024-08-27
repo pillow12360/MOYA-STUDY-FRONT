@@ -13,12 +13,15 @@ const config = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
+      '@src': path.resolve(__dirname, 'src/'),
       '@hooks': path.resolve(__dirname, 'src/hooks/'),
       '@layouts': path.resolve(__dirname, 'src/layouts/'),
       '@pages': path.resolve(__dirname, 'src/pages/'),
       '@typings': path.resolve(__dirname, 'src/typings/'),
       '@styles': path.resolve(__dirname, 'src/styles/'),
       '@contexts': path.resolve(__dirname, 'src/contexts/'),
+      '@themes': path.resolve(__dirname, 'src/themes/'),
+      '@components': path.resolve(__dirname, 'src/components/'),
     },
   },
   entry: {
@@ -26,6 +29,19 @@ const config = {
   },
   module: {
     rules: [
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i, // 이미지 파일 확장자에 대한 정규식
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[hash].[ext]',
+              outputPath: 'images', // 번들된 파일이 저장될 폴더
+            },
+          },
+        ],
+      },
+
       {
         test: /\.tsx?$/,
         loader: 'babel-loader',

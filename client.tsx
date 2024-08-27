@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 
-import App from './src/layouts/App';
+import App from './src/App';
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL =

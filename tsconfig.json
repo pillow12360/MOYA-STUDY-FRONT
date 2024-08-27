@@ -11,12 +11,15 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
+      "@src/*": ["src/*"],
       "@hooks/*": ["src/hooks/*"],
       "@layouts/*": ["src/layouts/*"],
       "@pages/*": ["src/pages/*"],
       "@typings/*": ["src/typings/*"],
       "@styles/*": ["src/styles/*"],
-      "@contexts/*": ["src/contexts/*"]
+      "@contexts/*": ["src/contexts/*"],
+      "@components/*": ["src/components/*"],
+      "@themes/*": ["src/themes/*"]
     }
   },
   "ts-node": {
