@@ -25,7 +25,7 @@ const config = {
     },
   },
   entry: {
-    app: './src/app',
+    app: './client.tsx',
   },
   module: {
     rules: [
