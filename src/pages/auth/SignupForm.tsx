@@ -112,7 +112,8 @@ const SignupForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} className={styles.SignupForm}>
       <div className={styles.signupHeader}>
-        ICT Project 2024.08 <br />
+        ICT Project 2024.08.27
+        <br />
         회원 가입
       </div>
       <div className={styles.formControl}>
