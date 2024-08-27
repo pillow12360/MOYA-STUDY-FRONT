@@ -23,7 +23,7 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
       </Button>
 
       <Typography variant="body1" paragraph>
-        SEOIL ICT 프로젝트
+        SEOIL ICT 프로젝트 2024
       </Typography>
     </Box>
   );
