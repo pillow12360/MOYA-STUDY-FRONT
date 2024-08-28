@@ -39,10 +39,6 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
-    try {
-    await axios.post(API_ROUTES.SIGNUP, { name, email, password, role: 'USER' }, { withCredentials: true });
-    }
-    
   };
 
   return (
