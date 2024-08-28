@@ -22,6 +22,7 @@ const config = {
       '@contexts': path.resolve(__dirname, 'src/contexts/'),
       '@themes': path.resolve(__dirname, 'src/themes/'),
       '@components': path.resolve(__dirname, 'src/components/'),
+      '@store': path.resolve(__dirname, 'src/store/'),
     },
   },
   entry: {

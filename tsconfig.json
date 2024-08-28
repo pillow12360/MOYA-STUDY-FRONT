@@ -19,7 +19,8 @@
       "@styles/*": ["src/styles/*"],
       "@contexts/*": ["src/contexts/*"],
       "@components/*": ["src/components/*"],
-      "@themes/*": ["src/themes/*"]
+      "@themes/*": ["src/themes/*"],
+      "@store/*": ["src/store/*"]
     }
   },
   "ts-node": {
