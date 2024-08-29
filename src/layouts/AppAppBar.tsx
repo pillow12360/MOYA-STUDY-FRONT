@@ -13,6 +13,10 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
 import TitleIcon from './TitleIcon';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { RootState } from '@store/Store'; // Redux 스토어에서 RootState를 가져옵니다.
+import { logout } from '@store/slices/AuthSlice'; // 로그아웃 액션을 가져옵니다.
 
 const logoStyle = {
   width: '140px',
@@ -27,6 +31,9 @@ interface AppAppBarProps {
 
 function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
   const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -44,6 +51,10 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
       });
       setOpen(false);
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout()); // 로그아웃 액션을 디스패치합니다.
   };
 
   return (
@@ -194,12 +205,25 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               }}
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-              <Button color="primary" variant="text" size="small" component={Link} to="/signin">
-                Login
-              </Button>
-              <Button color="primary" variant="contained" size="small" component={Link} to="/signup">
-                SignUp
-              </Button>
+              {user ? (
+                <>
+                  <Typography variant="body2" color="text.primary">
+                    {user.name}님
+                  </Typography>
+                  <Button color="primary" variant="text" size="small" onClick={handleLogout}>
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button color="primary" variant="text" size="small" component={Link} to="/signin">
+                    Login
+                  </Button>
+                  <Button color="primary" variant="contained" size="small" component={Link} to="/signup">
+                    SignUp
+                  </Button>
+                </>
+              )}
             </Box>
             <Box sx={{ display: { sm: '', md: 'none' } }}>
               <Button
@@ -230,22 +254,42 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   >
                     <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
                   </Box>
-                  <MenuItem onClick={() => scrollToSection('features')}>홈</MenuItem>
-                  <MenuItem onClick={() => scrollToSection('testimonials')}>프로젝트</MenuItem>
-                  <MenuItem onClick={() => scrollToSection('highlights')}>노션 페이지</MenuItem>
-                  <MenuItem onClick={() => scrollToSection('pricing')}>깃 허브 주소</MenuItem>
-                  <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem>
+                  <MenuItem onClick={() => scrollToSection('features')}>Home</MenuItem>
+                  <MenuItem onClick={() => scrollToSection('testimonials')}>Project</MenuItem>
+                  <MenuItem onClick={() => scrollToSection('highlights')}>Swagger</MenuItem>
+                  <MenuItem onClick={() => scrollToSection('pricing')}>DashBoard</MenuItem>
+                  <MenuItem onClick={() => scrollToSection('faq')}>Jira</MenuItem>
+                  <MenuItem onClick={() => scrollToSection('faq')}>SLACK</MenuItem>
                   <Divider />
-                  <MenuItem>
-                    <Button color="primary" variant="contained" component={Link} to="/signup" sx={{ width: '100%' }}>
-                      회원가입
-                    </Button>
-                  </MenuItem>
-                  <MenuItem>
-                    <Button color="primary" variant="outlined" component={Link} to="/signin" sx={{ width: '100%' }}>
-                      로그인
-                    </Button>
-                  </MenuItem>
+                  {user ? (
+                    <MenuItem>
+                      <Typography variant="body2" color="text.primary">
+                        {user.name}님
+                      </Typography>
+                      <Button color="primary" variant="text" size="small" onClick={handleLogout}>
+                        Logout
+                      </Button>
+                    </MenuItem>
+                  ) : (
+                    <>
+                      <MenuItem>
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          component={Link}
+                          to="/signup"
+                          sx={{ width: '100%' }}
+                        >
+                          SignUp
+                        </Button>
+                      </MenuItem>
+                      <MenuItem>
+                        <Button color="primary" variant="outlined" component={Link} to="/signin" sx={{ width: '100%' }}>
+                          Login
+                        </Button>
+                      </MenuItem>
+                    </>
+                  )}
                 </Box>
               </Drawer>
             </Box>
