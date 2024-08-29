@@ -12,9 +12,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios';
-import { API_ROUTES } from '@src/config/apiConfig';
 import { Alert } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@store/Store'; // 스토어와 타입을 가져옵니다.
+import { signinUser } from '@store/slices/AuthSlice'; // authSlice에서 signinUser 액션을 가져옵니다.
 
 function Copyright(props: any) {
   return (
@@ -36,16 +37,14 @@ export default function SignIn() {
   const [alertMessage, setAlertMessage] = React.useState<string | null>(null);
   const [alertSeverity, setAlertSeverity] = React.useState<'success' | 'error'>('success');
 
+  const dispatch = useDispatch<AppDispatch>();
+  const authState = useSelector((state: RootState) => state.auth);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email') as string;
     const password = data.get('password') as string;
-
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
 
     const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\S+$).{8,40}$/;
     if (!passwordRegex.test(password)) {
@@ -55,15 +54,33 @@ export default function SignIn() {
     }
 
     try {
-      await axios.post(API_ROUTES.SIGNIN, { email, password, role: 'USER' }, { withCredentials: true });
-      setAlertMessage('로그인 성공');
-      setAlertSeverity('success');
+      // Redux 액션 디스패치
+      await dispatch(signinUser({ email, password }));
+
+      if (authState.status === 'succeeded') {
+        setAlertMessage('로그인 성공 잠시 후 메인화면으로 이동합니다.');
+        setAlertSeverity('success');
+      } else if (authState.status === 'failed') {
+        setAlertMessage('로그인 실패: ' + authState.error);
+        setAlertSeverity('error');
+      }
     } catch (error) {
       console.error('로그인 오류:', error);
       setAlertMessage('로그인 실패 아이디 또는 비밀번호를 확인해주세요');
       setAlertSeverity('error');
     }
   };
+
+  React.useEffect(() => {
+    // 비동기적 dispatch 처리에 의한 상태 변경될 때 마다 알림 설정 useEffect
+    if (authState.status === 'succeeded') {
+      setAlertMessage('로그인 성공');
+      setAlertSeverity('success');
+    } else if (authState.status === 'failed') {
+      setAlertMessage('로그인 실패: ' + authState.error);
+      setAlertSeverity('error');
+    }
+  }, [authState.status, authState.error]);
 
   return (
     <ThemeProvider theme={defaultTheme}>

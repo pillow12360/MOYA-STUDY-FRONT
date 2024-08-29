@@ -15,6 +15,8 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import getLPTheme from './themes/getLPTheme';
+import store from '@store/Store';
+import { Provider } from 'react-redux';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -59,34 +61,36 @@ const App: React.FC = () => {
     setShowCustomTheme((prev) => !prev);
   };
   return (
-    <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
-      <CssBaseline />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100vh',
-          paddingTop: '15%', // AppBar height adjustment
-          paddingBottom: '60px', // Extra padding if needed
-          bgcolor: 'background.default',
-        }}
-      >
-        <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-
+    <Provider store={store}>
+      <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
         <CssBaseline />
-        <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-        <Routes>
-          <Route path="/" element={<HomePage mode={mode} toggleColorMode={toggleColorMode} />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/project" element={<ProjectPage />} />
-          <Route path="/SignIn" element={<SignIn />} />
-          <Route path="/SignUp" element={<SignUp />} />
-        </Routes>
-        <Footer mode={mode} toggleColorMode={toggleColorMode} />
-      </Box>
-    </ThemeProvider>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            paddingTop: '15%', // AppBar height adjustment
+            paddingBottom: '60px', // Extra padding if needed
+            bgcolor: 'background.default',
+          }}
+        >
+          <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+
+          <CssBaseline />
+          <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+          <Routes>
+            <Route path="/" element={<HomePage mode={mode} toggleColorMode={toggleColorMode} />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/project" element={<ProjectPage />} />
+            <Route path="/SignIn" element={<SignIn />} />
+            <Route path="/SignUp" element={<SignUp />} />
+          </Routes>
+          <Footer mode={mode} toggleColorMode={toggleColorMode} />
+        </Box>
+      </ThemeProvider>
+    </Provider>
   );
 };
 
