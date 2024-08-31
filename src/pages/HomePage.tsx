@@ -37,7 +37,7 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
       <Box sx={{ padding: '50px 0' }}>
         <Container>
           <Typography variant="h4" component="h2" sx={{ marginBottom: '30px' }}>
-            우리 팀 구성
+            팀 구성
           </Typography>
           <Grid container spacing={4}>
             <Grid item xs={12} sm={4}>
@@ -49,7 +49,7 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
                     style={{ width: '50px' }}
                   />
                   <Typography variant="h5" component="h3" sx={{ marginTop: '15px' }}>
-                    프론트엔드
+                    Front-End
                   </Typography>
                   <Typography variant="body1">
                     React, TypeScript, MUI를 사용하여 사용자 친화적인 인터페이스를 만듭니다.
@@ -61,16 +61,14 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
               <Card>
                 <CardContent>
                   <img
-                    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
-                    alt="Node.js"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDBnrqr2tLtfIEgfzjYUqOFHdQTM-TIKXWug&s"
+                    alt="Spring"
                     style={{ width: '50px' }}
                   />
                   <Typography variant="h5" component="h3" sx={{ marginTop: '15px' }}>
-                    백엔드
+                    Back-End
                   </Typography>
-                  <Typography variant="body1">
-                    Node.js, Express, 데이터베이스와의 통합을 통해 강력한 서버 로직을 구현합니다.
-                  </Typography>
+                  <Typography variant="body1">Spring, MySql와의 통합을 통해 강력한 서버 로직을 구현합니다.</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -78,12 +76,12 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
               <Card>
                 <CardContent>
                   <img
-                    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg"
+                    src="https://cdn.icon-icons.com/icons2/2407/PNG/512/aws_icon_146074.png"
                     alt="AWS"
                     style={{ width: '50px' }}
                   />
                   <Typography variant="h5" component="h3" sx={{ marginTop: '15px' }}>
-                    클라우드
+                    Cloud
                   </Typography>
                   <Typography variant="body1">
                     AWS 인프라를 활용해 확장성과 신뢰성을 갖춘 클라우드 환경을 구축합니다.
@@ -101,7 +99,6 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
           <Typography variant="h4" component="h2" sx={{ marginBottom: '30px' }}>
             문의하기
           </Typography>
-          <Typography variant="body1">프로젝트에 관심이 있으신가요? 언제든지 문의해 주세요.</Typography>
           <Typography variant="body1">이메일: contact@ictproject.com</Typography>
           <Typography variant="body1">전화: 02-123-4567</Typography>
         </Container>
