@@ -35,7 +35,7 @@
     "@types/fork-ts-checker-webpack-plugin": "^0.4.5",
     "@types/http-proxy-middleware": "^1.0.0",
     "@types/node": "^16.11.26",
-    "@types/react": "^18.3.4",
+    "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/webpack": "^5.28.0",
