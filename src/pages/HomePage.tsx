@@ -51,7 +51,13 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
           <Grid container spacing={4}>
             <Grid item xs={12} sm={4}>
               <Card sx={{ maxWidth: 345, marginBottom: '10px' }}>
-                <CardContent onClick={() => handleExpandClick('frontend')} sx={{ cursor: 'pointer' }}>
+                <CardContent
+                  onClick={() => handleExpandClick('frontend')}
+                  sx={{
+                    cursor: 'pointer',
+                    backgroundColor: expanded.frontend ? theme.palette.action.hover : theme.palette.background.paper,
+                  }}
+                >
                   <img
                     src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
                     alt="React"
@@ -82,10 +88,11 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
                       flexDirection: 'column',
                       alignItems: 'center',
                       padding: '20px',
-                      backgroundColor: '#f0f0f0',
+                      backgroundColor: theme.palette.background.default,
                       borderRadius: '10px',
-                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                      boxShadow: theme.shadows[2],
                       textAlign: 'center',
+                      color: theme.palette.text.primary,
                     }}
                   >
                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
@@ -104,7 +111,13 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
 
             <Grid item xs={12} sm={4}>
               <Card sx={{ maxWidth: 345, marginBottom: '10px' }}>
-                <CardContent onClick={() => handleExpandClick('backend')} sx={{ cursor: 'pointer' }}>
+                <CardContent
+                  onClick={() => handleExpandClick('backend')}
+                  sx={{
+                    cursor: 'pointer',
+                    backgroundColor: expanded.backend ? theme.palette.action.hover : theme.palette.background.paper,
+                  }}
+                >
                   <img
                     src="https://static-00.iconduck.com/assets.00/spring-icon-1024x1023-ljxx8bf7.png"
                     alt="Spring"
@@ -133,10 +146,11 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
                       flexDirection: 'column',
                       alignItems: 'center',
                       padding: '20px',
-                      backgroundColor: '#f0f0f0',
+                      backgroundColor: theme.palette.background.default,
                       borderRadius: '10px',
-                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                      boxShadow: theme.shadows[2],
                       textAlign: 'center',
+                      color: theme.palette.text.primary,
                     }}
                   >
                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
@@ -155,7 +169,13 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
 
             <Grid item xs={12} sm={4}>
               <Card sx={{ maxWidth: 345, marginBottom: '10px' }}>
-                <CardContent onClick={() => handleExpandClick('cloud')} sx={{ cursor: 'pointer' }}>
+                <CardContent
+                  onClick={() => handleExpandClick('cloud')}
+                  sx={{
+                    cursor: 'pointer',
+                    backgroundColor: expanded.cloud ? theme.palette.action.hover : theme.palette.background.paper,
+                  }}
+                >
                   <img
                     src="https://cdn.icon-icons.com/icons2/2407/PNG/512/aws_icon_146074.png"
                     alt="AWS"
@@ -171,7 +191,10 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
                     onClick={() => handleExpandClick('cloud')}
                     aria-expanded={expanded.cloud}
                     aria-label="show more"
-                    sx={{ transform: expanded.cloud ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}
+                    sx={{
+                      transform: expanded.cloud ? 'rotate(180deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.3s',
+                    }}
                   >
                     <ExpandMoreIcon />
                   </IconButton>
@@ -183,10 +206,11 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
                       flexDirection: 'column',
                       alignItems: 'center',
                       padding: '20px',
-                      backgroundColor: '#f0f0f0',
+                      backgroundColor: theme.palette.background.default,
                       borderRadius: '10px',
-                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                      boxShadow: theme.shadows[2],
                       textAlign: 'center',
+                      color: theme.palette.text.primary,
                     }}
                   >
                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
@@ -207,12 +231,14 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
       </Box>
 
       {/* 문의하기 */}
-      <Box sx={{ padding: '50px 0', backgroundColor: theme.palette.grey[900], color: '#fff' }}>
+      <Box sx={{ padding: '50px 0' }}>
         <Container>
-          <Typography variant="h4" component="h2" sx={{ marginBottom: '30px' }}>
+          <Typography variant="h4" component="h2" sx={{ marginBottom: '30px', color: theme.palette.text.primary }}>
             문의하기
           </Typography>
-          <Typography variant="body1">이메일: contact@ictproject.com</Typography>
+          <Typography variant="body1" sx={{ color: theme.palette.text.primary }}>
+            이메일: contact@ictproject.com
+          </Typography>
           <Typography variant="body1">전화: 02-123-4567</Typography>
         </Container>
       </Box>
