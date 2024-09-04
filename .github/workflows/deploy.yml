@@ -31,7 +31,9 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_NAME }}
         run: |
-          aws s3 sync ./dist s3://$AWS_S3_BUCKET --delete --region $AWS_REGION
+          # 파일에 Cache-Control 헤더를 추가하여 캐시 무효화
+          aws s3 sync ./dist s3://$AWS_S3_BUCKET --delete --region $AWS_REGION \
+          --cache-control "no-cache, no-store, must-revalidate"
 
       - name: Invalidate CloudFront Cache (Optional)
         if: env.AWS_CLOUDFRONT_ID != ''
