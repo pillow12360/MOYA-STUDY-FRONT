@@ -83,12 +83,6 @@ export default function StickyFooter({ mode, toggleColorMode }: AppAppBarProps) 
                   Follow Us
                 </Typography>
                 <Box display="flex" gap={1}>
-                  <IconButton href="https://www.facebook.com" color="inherit">
-                    <FacebookIcon />
-                  </IconButton>
-                  <IconButton href="https://www.twitter.com" color="inherit">
-                    <TwitterIcon />
-                  </IconButton>
                   <IconButton href="https://www.instagram.com" color="inherit">
                     <InstagramIcon />
                   </IconButton>

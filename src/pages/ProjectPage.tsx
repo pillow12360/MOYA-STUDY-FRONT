@@ -1,11 +1,20 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Typography, Box, Container } from '@mui/material';
 
 const ProjectPage: React.FC = () => {
   return (
-    <Typography variant="h4" gutterBottom>
-      프로젝트 소개
-    </Typography>
+    <>
+      <Typography variant="h4" gutterBottom>
+        프로젝트 소개
+      </Typography>
+      <Box sx={{ padding: '50px 0' }}>
+        <Container>
+          <Typography variant="h4" component="h2" sx={{ marginBottom: '30px' }}>
+            모의 주식 투자 프로젝트
+          </Typography>
+        </Container>
+      </Box>
+    </>
   );
 };
 

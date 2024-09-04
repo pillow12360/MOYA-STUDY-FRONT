@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Box, Container, Grid, Card, CardContent, Collapse, IconButton } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TeamMembers from '@components/TeamMembers';
 
 interface HomePageProps {
@@ -22,7 +21,6 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
 
   return (
     <Box sx={{ minHeight: '100vh', textAlign: 'center' }}>
-      {/* Hero Section */}
       <Box
         sx={{
           backgroundImage: 'url(/path-to-your-image.jpg)', // 실제 이미지 경로 사용
@@ -50,29 +48,6 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
             팀 구성
           </Typography>
           <TeamMembers />
-        </Container>
-      </Box>
-
-      <Box sx={{ padding: '50px 0' }}>
-        <Container>
-          <Typography variant="h2" component="h2" sx={{ marginBottom: '30px' }}>
-            진행 프로젝트 목록
-          </Typography>
-          <Typography variant="h4" component="h2" sx={{ marginBottom: '30px' }}>
-            모의 주식 투자 프로젝트
-          </Typography>
-        </Container>
-      </Box>
-
-      {/* 문의하기 */}
-      <Box sx={{ padding: '50px 0' }}>
-        <Container>
-          <Typography variant="h4" component="h2" sx={{ marginBottom: '30px', color: theme.palette.text.primary }}>
-            문의하기
-          </Typography>
-          <Typography variant="body1" sx={{ color: theme.palette.text.primary }}>
-            이메일: pillow12360@gmail.com (한동찬)
-          </Typography>
         </Container>
       </Box>
     </Box>

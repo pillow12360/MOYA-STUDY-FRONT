@@ -27,9 +27,17 @@ const teamMembers: TeamMember[] = [
         name: 'TypeScript',
         iconUri: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
       },
+      {
+        name: 'Material UI',
+        iconUri: 'https://velog.velcdn.com/images/diso592/post/1fdea1fb-ce7e-448e-8d71-af51bdb67a6d/image.png',
+      },
+      {
+        name: 'Redux',
+        iconUri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHYiSZ7pgNHIi4X9la9Z1_oHsBpntPBeY6fA&s',
+      },
     ],
     imageSrc: 'https://i.pinimg.com/originals/ab/78/aa/ab78aabc7191731a6c5d94f3ae7d3bf0.jpg',
-    email: 'example@gmail.com',
+    email: 'pillow12360@gmail.com',
     github: 'https://github.com/pillow12360', // GitHub 주소
   },
   {
@@ -48,9 +56,9 @@ const teamMembers: TeamMember[] = [
         iconUri: 'https://velog.velcdn.com/images/baeyuna97/post/9948979a-092f-4b30-b031-0ee8cf2cca0d/image.png',
       },
     ],
-    imageSrc: 'https://cdn.dailyvet.co.kr/wp-content/uploads/2024/05/15231647/20240515ceva_experts4.jpg',
-    email: 'example@gmail.com',
-    github: 'https://github.com/exampleUser2', // GitHub 주소
+    imageSrc: 'https://avatars.githubusercontent.com/u/119467493?v=4',
+    email: 'tjddnjs2598@naver.com',
+    github: 'https://github.com/sungwon2598', // GitHub 주소
   },
   {
     name: '고영진',
