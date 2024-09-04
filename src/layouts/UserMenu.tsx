@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Avatar, Menu, MenuItem, IconButton, Typography, Collapse, CardContent } from '@mui/material';
+import { Avatar, MenuItem, IconButton, Typography, Collapse, CardContent } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/Store'; // Redux 스토어에서 RootState를 가져옵니다.
 import { logout } from '@store/slices/AuthSlice'; // 로그아웃 액션을 가져옵니다.
@@ -11,6 +11,9 @@ function UserMenu() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
   const theme = useTheme();
+
+  // 메뉴를 열고 닫기 위한 상태
+  const isOpen = Boolean(anchorEl);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -32,6 +35,25 @@ function UserMenu() {
     return '';
   };
 
+  // 외부 클릭 감지 후 메뉴 닫기
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (anchorEl && !anchorEl.contains(event.target as Node)) {
+        handleMenuClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [anchorEl, isOpen]);
+
   return (
     <div>
       <IconButton onClick={handleMenuOpen}>
@@ -44,7 +66,7 @@ function UserMenu() {
         </Avatar>
       </IconButton>
 
-      <Collapse in={Boolean(anchorEl)} timeout="auto" unmountOnExit>
+      <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <CardContent
           sx={{
             display: 'flex',
@@ -68,22 +90,19 @@ function UserMenu() {
           <Typography variant="body2" color="textSecondary" sx={{ marginBottom: '10px' }}>
             {user?.role || 'Role Unknown'}
           </Typography>
-          <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-            이메일 : {user?.email || 'Unknown'}
-          </Typography>
           <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
             <Typography variant="body2" sx={{ color: theme.palette.text.primary }}>
-              Profile
+              프로필
             </Typography>
           </MenuItem>
           <MenuItem component={Link} to="/settings" onClick={handleMenuClose}>
             <Typography variant="body2" sx={{ color: theme.palette.text.primary }}>
-              Settings
+              세팅
             </Typography>
           </MenuItem>
           <MenuItem onClick={handleLogout}>
             <Typography variant="body2" sx={{ color: theme.palette.text.primary }}>
-              Logout
+              로그아웃
             </Typography>
           </MenuItem>
         </CardContent>

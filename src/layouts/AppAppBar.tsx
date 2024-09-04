@@ -10,21 +10,13 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
-import TitleIcon from './TitleIcon';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { RootState } from '@store/Store'; // Redux 스토어에서 RootState를 가져옵니다.
 import { logout } from '@store/slices/AuthSlice'; // 로그아웃 액션을 가져옵니다.
-
 import UserMenu from './UserMenu';
-
-const logoStyle = {
-  width: '140px',
-  height: 'auto',
-  cursor: 'pointer',
-};
 
 interface AppAppBarProps {
   mode: PaletteMode;
@@ -34,25 +26,10 @@ interface AppAppBarProps {
 function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
-
   const user = useSelector((state: RootState) => state.auth.user);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
-  };
-
-  const scrollToSection = (sectionId: string) => {
-    const sectionElement = document.getElementById(sectionId);
-    const offset = 128;
-    if (sectionElement) {
-      const targetScroll = sectionElement.offsetTop - offset;
-      sectionElement.scrollIntoView({ behavior: 'smooth' });
-      window.scrollTo({
-        top: targetScroll,
-        behavior: 'smooth',
-      });
-      setOpen(false);
-    }
   };
 
   const handleLogout = () => {
@@ -90,200 +67,123 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   : '0 0 1px rgba(2, 31, 59, 0.7), 1px 1.5px 2px -1px rgba(2, 31, 59, 0.65), 4px 4px 12px -2.5px rgba(2, 31, 59, 0.65)',
             })}
           >
+            {/* 프로젝트 이름: 중앙 정렬 */}
             <Box
               sx={{
                 flexGrow: 1,
                 display: 'flex',
-                alignItems: 'center',
-                ml: '-18px',
-                px: 0,
+                justifyContent: { xs: 'center', md: 'flex-start' },
               }}
             >
-              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <MenuItem onClick={() => scrollToSection('features')} sx={{ py: '6px', px: '12px' }}>
-                  <Typography
-                    variant="body2"
-                    color="text.primary"
-                    component={Link}
-                    to="/"
-                    sx={{
-                      textDecoration: 'none',
-                      '&:hover': {
-                        color: 'primary.main',
-                      },
-                    }}
-                  >
-                    ICT-Project
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection('testimonials')} sx={{ py: '6px', px: '12px' }}>
-                  <Typography
-                    variant="body2"
-                    color="text.primary"
-                    component={Link}
-                    to="/project"
-                    sx={{
-                      textDecoration: 'none',
-                      '&:hover': {
-                        color: 'primary.main',
-                      },
-                    }}
-                  >
-                    Project
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection('highlights')} sx={{ py: '6px', px: '12px' }}>
-                  <Typography
-                    variant="body2"
-                    color="text.primary"
-                    component={Link}
-                    to="http://3.39.12.17:8080/swagger-ui/index.html#"
-                    sx={{
-                      textDecoration: 'none',
-                      '&:hover': {
-                        color: 'primary.main',
-                      },
-                    }}
-                  >
-                    Swagger
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection('pricing')} sx={{ py: '6px', px: '12px' }}>
-                  <Typography
-                    variant="body2"
-                    color="text.primary"
-                    component={Link}
-                    to="http://3.39.12.17:8080/dashboard#"
-                    sx={{
-                      textDecoration: 'none',
-                      '&:hover': {
-                        color: 'primary.main',
-                      },
-                    }}
-                  >
-                    DashBoard
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection('pricing')} sx={{ py: '6px', px: '12px' }}>
-                  <Typography
-                    variant="body2"
-                    color="text.primary"
-                    component={Link}
-                    to="https://www.atlassian.com/software/jira"
-                    sx={{
-                      textDecoration: 'none',
-                      '&:hover': {
-                        color: 'primary.main',
-                      },
-                    }}
-                  >
-                    Jira
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection('faq')} sx={{ py: '6px', px: '12px' }}>
-                  <Typography
-                    variant="body2"
-                    color="text.primary"
-                    component={Link}
-                    to="https://app.slack.com/client/T07GWRCMT55/D07GWT6J6BH"
-                    sx={{
-                      textDecoration: 'none',
-                      '&:hover': {
-                        color: 'primary.main',
-                      },
-                    }}
-                  >
-                    SLACK
-                  </Typography>
-                </MenuItem>
-              </Box>
+              <Typography
+                variant="h6"
+                component={Link}
+                to="/"
+                sx={{
+                  textDecoration: 'none',
+                  color: 'primary.main',
+                  fontWeight: 'bold',
+                }}
+              >
+                ICT
+              </Typography>
             </Box>
+
+            {/* 사용자 메뉴 및 로그인 버튼: 오른쪽에 위치 */}
             <Box
               sx={{
-                display: { xs: 'none', md: 'flex' },
-                gap: 0.5,
+                display: 'flex',
                 alignItems: 'center',
+                gap: 0.5,
               }}
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
               {user ? (
-                <>
-                  <UserMenu />
-                </>
+                <UserMenu />
               ) : (
                 <>
                   <Button color="primary" variant="text" size="small" component={Link} to="/signin">
                     Login
                   </Button>
-                  <Button color="primary" variant="contained" size="small" component={Link} to="/signup">
-                    SignUp
-                  </Button>
                 </>
               )}
             </Box>
-            <Box sx={{ display: { sm: '', md: 'none' } }}>
-              <Button
-                variant="text"
-                color="primary"
+
+            {/* 햄버거 메뉴 버튼 (오른쪽) - 다크/라이트 모드에 맞게 색상 변경 */}
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                edge="end"
                 aria-label="menu"
                 onClick={toggleDrawer(true)}
-                sx={{ minWidth: '30px', p: '4px' }}
+                sx={{
+                  color: 'primary.main',
+                }}
               >
                 <MenuIcon />
-              </Button>
-              <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+              </IconButton>
+            </Box>
+
+            {/* 오른쪽에 있는 Drawer */}
+            <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+              <Box
+                sx={{
+                  minWidth: '60dvw',
+                  p: 2,
+                  backgroundColor: 'background.paper',
+                  flexGrow: 1,
+                }}
+              >
                 <Box
                   sx={{
-                    minWidth: '60dvw',
-                    p: 2,
-                    backgroundColor: 'background.paper',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'end',
                     flexGrow: 1,
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'end',
-                      flexGrow: 1,
-                    }}
-                  >
-                    <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-                  </Box>
-                  <MenuItem onClick={() => scrollToSection('features')}>Home</MenuItem>
-                  <MenuItem onClick={() => scrollToSection('testimonials')}>Project</MenuItem>
-                  <MenuItem onClick={() => scrollToSection('highlights')}>Swagger</MenuItem>
-                  <MenuItem onClick={() => scrollToSection('pricing')}>DashBoard</MenuItem>
-                  <MenuItem onClick={() => scrollToSection('faq')}>Jira</MenuItem>
-                  <MenuItem onClick={() => scrollToSection('faq')}>SLACK</MenuItem>
-                  <Divider />
-                  {user ? (
-                    <MenuItem>
-                      <UserMenu />
-                    </MenuItem>
-                  ) : (
-                    <>
-                      <MenuItem>
-                        <Button
-                          color="primary"
-                          variant="contained"
-                          component={Link}
-                          to="/signup"
-                          sx={{ width: '100%' }}
-                        >
-                          SignUp
-                        </Button>
-                      </MenuItem>
-                      <MenuItem>
-                        <Button color="primary" variant="outlined" component={Link} to="/signin" sx={{ width: '100%' }}>
-                          Login
-                        </Button>
-                      </MenuItem>
-                    </>
-                  )}
+                  <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
                 </Box>
-              </Drawer>
-            </Box>
+                {/* Drawer 메뉴를 react-router-dom의 Link 컴포넌트로 변경 */}
+                <MenuItem component={Link} to="/">
+                  Home
+                </MenuItem>
+                <MenuItem component={Link} to="/project">
+                  Project
+                </MenuItem>
+                <MenuItem component={Link} to="/swagger">
+                  Swagger
+                </MenuItem>
+                <MenuItem component={Link} to="/dashboard">
+                  DashBoard
+                </MenuItem>
+                <MenuItem component={Link} to="/jira">
+                  Jira
+                </MenuItem>
+                <MenuItem component={Link} to="/slack">
+                  SLACK
+                </MenuItem>
+                <MenuItem component={Link} to="/about">
+                  About
+                </MenuItem>
+                <MenuItem component={Link} to="/contact">
+                  Contact
+                </MenuItem>
+                <Divider />
+                {user ? (
+                  <MenuItem>
+                    <UserMenu />
+                  </MenuItem>
+                ) : (
+                  <>
+                    <MenuItem>
+                      <Button color="primary" variant="outlined" component={Link} to="/signin" sx={{ width: '100%' }}>
+                        Login
+                      </Button>
+                    </MenuItem>
+                  </>
+                )}
+              </Box>
+            </Drawer>
           </Toolbar>
         </Container>
       </AppBar>

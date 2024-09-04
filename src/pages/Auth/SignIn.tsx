@@ -16,7 +16,7 @@ import { Alert } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@store/Store'; // 스토어와 타입을 가져옵니다.
 import { signinUser } from '@store/slices/AuthSlice'; // authSlice에서 signinUser 액션을 가져옵니다.
-
+import { useNavigate } from 'react-router-dom';
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -35,6 +35,7 @@ const defaultTheme = createTheme();
 export default function SignIn() {
   const [alertMessage, setAlertMessage] = React.useState<string | null>(null);
   const [alertSeverity, setAlertSeverity] = React.useState<'success' | 'error'>('success');
+  const navigate = useNavigate(); // useNavigate 훅을 사용하여 네비게이션 제어
 
   const dispatch = useDispatch<AppDispatch>();
   const authState = useSelector((state: RootState) => state.auth);
@@ -59,6 +60,11 @@ export default function SignIn() {
       if (authState.status === 'succeeded') {
         setAlertMessage('로그인 성공 잠시 후 메인화면으로 이동합니다.');
         setAlertSeverity('success');
+
+        // 이전 화면으로 돌아가기 (history back)
+        setTimeout(() => {
+          navigate(-1); // 마지막 방문한 페이지로 돌아갑니다.
+        }, 500); // 0.3초 후에 이동
       } else if (authState.status === 'failed') {
         setAlertMessage('로그인 실패: ' + authState.error);
         setAlertSeverity('error');
