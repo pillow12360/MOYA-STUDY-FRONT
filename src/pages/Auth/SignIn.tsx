@@ -20,7 +20,6 @@ import { signinUser } from '@store/slices/AuthSlice'; // authSlice에서 signinU
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
       <Link color="inherit" href="/">
         ict-project
       </Link>{' '}

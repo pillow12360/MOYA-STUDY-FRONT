@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, CardContent, Typography, Box, Avatar, Collapse, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Box, Avatar, Collapse, Grid, Link } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 interface TechStack {
@@ -12,9 +12,11 @@ interface TeamCardProps {
   role: string;
   stack: TechStack[]; // 배열로 기술 스택을 정의
   imageSrc: string;
+  email: string;
+  githubUrl: string; // GitHub URL 추가
 }
 
-const TeamCard: React.FC<TeamCardProps> = ({ name, role, stack, imageSrc }) => {
+const TeamCard: React.FC<TeamCardProps> = ({ name, role, stack, imageSrc, email, githubUrl }) => {
   const [expanded, setExpanded] = React.useState(false);
   const theme = useTheme();
 
@@ -43,6 +45,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ name, role, stack, imageSrc }) => {
       <Box
         sx={{
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           padding: '16px',
           backgroundColor: theme.palette.background.default,
@@ -52,16 +55,20 @@ const TeamCard: React.FC<TeamCardProps> = ({ name, role, stack, imageSrc }) => {
         <Avatar
           src={imageSrc || 'https://via.placeholder.com/150'} // 이미지가 없을 때 기본 이미지 사용
           alt={name}
-          sx={{ width: 56, height: 56, marginRight: '16px' }}
+          sx={{ width: 80, height: 80, marginBottom: '12px' }}
         />
-        <Box>
-          <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
-            {name}
-          </Typography>
-          <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
-            {role}
-          </Typography>
-        </Box>
+        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
+          {name}
+        </Typography>
+        <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+          {role}
+        </Typography>
+        <Typography variant="body2" sx={{ color: theme.palette.text.secondary, marginBottom: '8px' }}>
+          {email}
+        </Typography>
+        <Link href={githubUrl} target="_blank" rel="noopener" underline="hover" sx={{ marginBottom: '16px' }}>
+          GitHub
+        </Link>
       </Box>
 
       {/* Card Content: Stack Information */}
@@ -76,10 +83,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ name, role, stack, imageSrc }) => {
             alignItems: 'center',
           }}
         >
-          <Typography variant="body1" sx={{ fontStyle: 'italic', color: theme.palette.text.primary }}>
-            기술 스택
-          </Typography>
-          <Grid container spacing={2} justifyContent="center" sx={{ marginTop: '10px' }}>
+          <Grid container spacing={2} justifyContent="center">
             {/* 기술 스택 아이콘을 표시 */}
             {stack.map((tech, index) => (
               <Grid item key={index}>

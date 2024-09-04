@@ -35,7 +35,7 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
       >
         <Container>
           <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
-            Team-ICT(임시) 2024.08
+            Team-ICT(임시) 2024.09
           </Typography>
           <Typography variant="h5" sx={{ marginBottom: '20px' }}>
             프로젝트 시작
@@ -53,6 +53,17 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
         </Container>
       </Box>
 
+      <Box sx={{ padding: '50px 0' }}>
+        <Container>
+          <Typography variant="h2" component="h2" sx={{ marginBottom: '30px' }}>
+            진행 프로젝트 목록
+          </Typography>
+          <Typography variant="h4" component="h2" sx={{ marginBottom: '30px' }}>
+            모의 주식 투자 프로젝트
+          </Typography>
+        </Container>
+      </Box>
+
       {/* 문의하기 */}
       <Box sx={{ padding: '50px 0' }}>
         <Container>
@@ -60,7 +71,7 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
             문의하기
           </Typography>
           <Typography variant="body1" sx={{ color: theme.palette.text.primary }}>
-            이메일: contact@ictproject.com
+            이메일: pillow12360@gmail.com (한동찬)
           </Typography>
         </Container>
       </Box>

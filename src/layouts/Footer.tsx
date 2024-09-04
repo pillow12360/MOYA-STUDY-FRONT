@@ -23,7 +23,7 @@ function Copyright() {
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="/">
-        SEOIL ICT PROJECT
+        ICT PROJECT
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -120,9 +120,7 @@ export default function StickyFooter({ mode, toggleColorMode }: AppAppBarProps) 
                 </ul>
               </Grid>
             </Grid>
-            <Box mt={5} textAlign="center">
-              <Copyright />
-            </Box>
+            <Box mt={5} textAlign="center"></Box>
           </Container>
         </Box>
       </Box>

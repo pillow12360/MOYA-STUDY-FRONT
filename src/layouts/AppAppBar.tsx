@@ -99,7 +99,6 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 px: 0,
               }}
             >
-              <TitleIcon />
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <MenuItem onClick={() => scrollToSection('features')} sx={{ py: '6px', px: '12px' }}>
                   <Typography
