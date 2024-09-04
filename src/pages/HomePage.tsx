@@ -35,7 +35,7 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
       >
         <Container>
           <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
-            ICT-PROJECT(임시) 2024
+            Team-ICT(임시) 2024.08
           </Typography>
           <Typography variant="h5" sx={{ marginBottom: '20px' }}>
             프로젝트 시작
