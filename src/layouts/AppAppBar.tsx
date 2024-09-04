@@ -18,6 +18,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/Store'; // Redux 스토어에서 RootState를 가져옵니다.
 import { logout } from '@store/slices/AuthSlice'; // 로그아웃 액션을 가져옵니다.
 
+import UserMenu from './UserMenu';
+
 const logoStyle = {
   width: '140px',
   height: 'auto',
@@ -207,12 +209,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
               {user ? (
                 <>
-                  <Typography variant="body2" color="text.primary">
-                    {user.name}님
-                  </Typography>
-                  <Button color="primary" variant="text" size="small" onClick={handleLogout}>
-                    Logout
-                  </Button>
+                  <UserMenu />
                 </>
               ) : (
                 <>
@@ -263,12 +260,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   <Divider />
                   {user ? (
                     <MenuItem>
-                      <Typography variant="body2" color="text.primary">
-                        {user.name}님
-                      </Typography>
-                      <Button color="primary" variant="text" size="small" onClick={handleLogout}>
-                        Logout
-                      </Button>
+                      <UserMenu />
                     </MenuItem>
                   ) : (
                     <>
