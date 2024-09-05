@@ -1,16 +1,19 @@
 // ToolCard.tsx
 import React from 'react';
-import { Card, CardContent, Typography, Box, Avatar, Collapse, Grid, Link } from '@mui/material';
+import { Card, CardContent, Typography, Box, Avatar, Collapse, Grid, Link, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import IconButton from '@mui/material/IconButton';
 
 interface ToolCardProps {
   name: string;
   description: string;
   iconUri: string;
-  siteUrl: string; // 사이트 URL
+  siteUrl: string;
+  details: string;
 }
 
-const ToolCard: React.FC<ToolCardProps> = ({ name, description, iconUri, siteUrl }) => {
+const ToolCard: React.FC<ToolCardProps> = ({ name, description, iconUri, siteUrl, details }) => {
   const [expanded, setExpanded] = React.useState(false);
   const theme = useTheme();
 
@@ -21,60 +24,86 @@ const ToolCard: React.FC<ToolCardProps> = ({ name, description, iconUri, siteUrl
   return (
     <Card
       sx={{
-        maxWidth: 345,
-        margin: '20px auto', // 카드들을 가운데에 배치
-        borderRadius: '12px',
-        boxShadow: theme.shadows[4],
+        maxWidth: 400,
+        margin: '20px auto',
+        borderRadius: '16px',
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[3],
         overflow: 'hidden',
-        cursor: 'pointer',
         transition: 'transform 0.3s, box-shadow 0.3s',
         '&:hover': {
           transform: 'scale(1.05)',
           boxShadow: theme.shadows[6],
         },
       }}
-      onClick={handleExpandClick} // 카드를 클릭하면 확장
     >
-      {/* Card Header: Tool Icon and Name */}
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          padding: '16px',
-          backgroundColor: theme.palette.background.default,
+          padding: '24px',
         }}
       >
-        {/* 툴 아이콘 */}
+        {/* Tool Icon */}
         <Avatar
-          src={iconUri || 'https://via.placeholder.com/150'} // 아이콘이 없을 경우 기본 이미지 사용
+          src={iconUri || 'https://via.placeholder.com/150'}
           alt={name}
-          sx={{ width: 80, height: 80, marginBottom: '12px' }}
+          sx={{ width: 100, height: 100, marginBottom: '16px' }}
         />
-        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
+
+        {/* Tool Name */}
+        <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
           {name}
         </Typography>
-        <Typography variant="body2" sx={{ color: theme.palette.text.secondary, marginBottom: '8px' }}>
+
+        {/* Tool Description */}
+        <Typography
+          variant="body1"
+          sx={{ color: theme.palette.text.secondary, marginBottom: '16px', textAlign: 'center' }}
+        >
           {description}
         </Typography>
-        <Link href={siteUrl} target="_blank" rel="noopener" underline="hover" sx={{ marginBottom: '16px' }}>
-          Visit Site
+
+        {/* Site URL Link */}
+        <Link
+          href={siteUrl}
+          target="_blank"
+          rel="noopener"
+          underline="hover"
+          sx={{ marginBottom: '24px', color: theme.palette.primary.main, fontWeight: 'bold' }}
+        >
+          Visit {name}
         </Link>
+
+        <Divider sx={{ width: '100%', marginBottom: '16px' }} />
+
+        {/* Expand Icon */}
+        <IconButton
+          onClick={handleExpandClick}
+          sx={{
+            transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 0.3s ease',
+            marginBottom: '8px',
+          }}
+        >
+          <ExpandMoreIcon />
+        </IconButton>
       </Box>
 
-      {/* Card Content: Additional Information (if any) */}
+      {/* Expanded details content */}
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent
           sx={{
-            backgroundColor: theme.palette.background.paper,
+            backgroundColor: theme.palette.background.default,
             padding: '16px',
-            textAlign: 'center', // 가운데 정렬
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            textAlign: 'left',
+            color: theme.palette.text.secondary,
           }}
         >
-          {/* 여기에 추가적인 정보를 입력할 수 있습니다 */}
+          <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+            {details}
+          </Typography>
         </CardContent>
       </Collapse>
     </Card>
