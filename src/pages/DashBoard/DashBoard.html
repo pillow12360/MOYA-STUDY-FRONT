@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" th:href="@{/teamsicon.ico}" />
+    <title>TeamS DashBoard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+      }
+      .sidebar {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        min-height: 100vh;
+        transition: all 0.3s;
+      }
+      .sidebar-sticky {
+        position: sticky;
+        top: 0;
+        height: calc(100vh - 48px);
+        padding-top: 1rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      .nav-link {
+        color: #bdc3c7;
+        transition: all 0.3s;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        margin-bottom: 0.5rem;
+      }
+      .nav-link:hover,
+      .nav-link.active {
+        color: #fff;
+        background-color: #34495e;
+      }
+      .main-content {
+        padding: 2rem;
+      }
+      .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+      .resource-icon {
+        height: 64px;
+        width: auto;
+        object-fit: contain;
+        margin-bottom: 1rem;
+      }
+      .btn-custom {
+        border-radius: 20px;
+        padding: 0.5rem 1.5rem;
+        transition: all 0.3s;
+      }
+      .btn-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .modal-content {
+        border-radius: 15px;
+      }
+      .modal-header {
+        background-color: #3498db;
+        color: white;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+      }
+      .modal-body {
+        padding: 2rem;
+      }
+      .architecture-header {
+        background-color: #f8f9fa;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+      .architecture-header:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      .architecture-button {
+        width: 100%;
+        text-align: left;
+        color: #495057;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .architecture-button:hover,
+      .architecture-button:focus {
+        color: #007bff;
+        text-decoration: none;
+      }
+      .architecture-button::after {
+        content: '\f078';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        transition: transform 0.3s ease;
+      }
+      .architecture-button[aria-expanded='true']::after {
+        transform: rotate(180deg);
+      }
+      #mermaidDiagram {
+        width: 100%;
+        height: 580px; /* 개발서버 다이어그램 높이 */
+      }
+      #productionMermaidDiagram {
+        width: 100%;
+        height: 1000px; /* 운영서버 다이어그램 높이 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  href="#"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  title="View Dashboard"
+                >
+                  <i class="fas fa-home me-2"></i>Dashboard
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Adjust Settings">
+                  <i class="fas fa-cog me-2"></i>Settings
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#helpModal">
+                  <i class="fas fa-question-circle me-2"></i>Help
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+          <h1 class="mb-4 mt-4">Teams Seoil Resource Dashboard</h1>
+
+          <!-- 개발서버 아키텍처 섹션 -->
+          <div class="card mb-4">
+            <div class="card architecture-header mb-4" id="architectureHeader">
+              <h2 class="mb-0">
+                <button
+                  class="btn architecture-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#architectureDiagram"
+                  aria-expanded="true"
+                  aria-controls="architectureDiagram"
+                >
+                  <i class="fas fa-sitemap"></i> 개발서버 아키텍처 (구축 완료)
+                </button>
+              </h2>
+            </div>
+            <div id="architectureDiagram" class="collapse show" aria-labelledby="architectureHeader">
+              <div class="card-body">
+                <div
+                  id="mermaidDiagram"
+                  data-diagram='flowchart TB
+                            subgraph GitHub ["GitHub"]
+                                direction TB
+                                GH_BE[백엔드 레포지토리]
+                                GH_FE[프론트엔드 레포지토리]
+                                GH_ACTION_BE[GitHub Actions 백엔드]
+                                GH_ACTION_FE[GitHub Actions 프론트엔드]
+                                GH_BE --> GH_ACTION_BE
+                                GH_FE --> GH_ACTION_FE
+                            end
+                            subgraph AWS ["AWS"]
+                                direction TB
+                                subgraph Compute ["Compute & Storage"]
+                                    subgraph EC2 [EC2]
+                                        SPRING[Spring Boot]
+                                        SWAGGER[Swagger]
+                                        SPRING --- SWAGGER
+                                    end
+                                    S3[S3 React]
+                                end
+                                subgraph Database ["Database"]
+                                    RDS[(RDS MySQL)]
+                                    REDIS[(ElastiCache Redis)]
+                                end
+                                CW[CloudWatch]
+                            end
+                            SLACK[Slack]
+                            GH_BE & GH_FE --> |변경/커밋/PR 알림| SLACK
+                            GH_ACTION_BE --> |배포| EC2
+                            GH_ACTION_FE --> |배포| S3
+                            EC2 &lt;--&gt; RDS & REDIS
+                            CW --> |알림| SLACK
+                            CW -.-> |모니터링| EC2 & RDS & S3
+                            classDef awsColor fill:#FF9900,stroke:#232F3E,color:#232F3E;
+                            classDef githubColor fill:#24292E,stroke:#000000,color:#FFFFFF;
+                            classDef slackColor fill:#4A154B,stroke:#000000,color:#FFFFFF;
+                            classDef swaggerColor fill:#85EA2D,stroke:#173647,color:#173647;
+                            class EC2,S3,RDS,REDIS,CW awsColor;
+                            class GH_BE,GH_FE,GH_ACTION_BE,GH_ACTION_FE githubColor;
+                            class SLACK slackColor;
+                            class SWAGGER swaggerColor;'
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 운영서버 아키텍처 섹션 -->
+          <div class="card mb-4">
+            <div class="card architecture-header mb-4" id="productionArchitectureHeader">
+              <h2 class="mb-0">
+                <button
+                  class="btn architecture-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#productionArchitectureDiagram"
+                  aria-expanded="true"
+                  aria-controls="productionArchitectureDiagram"
+                >
+                  <i class="fas fa-sitemap"></i> 운영서버 아키텍처 예상도
+                </button>
+              </h2>
+            </div>
+            <div
+              id="productionArchitectureDiagram"
+              class="collapse show"
+              aria-labelledby="productionArchitectureHeader"
+            >
+              <div class="card-body">
+                <div
+                  id="productionMermaidDiagram"
+                  data-diagram='graph TB
+                                User((사용자)) --> CF[Cloudflare]
+                                CF --> ALB[Application Load Balancer]
+
+                                subgraph "온프레미스 환경 (주 운영)"
+                                    OP[홈 서버]
+                                    subgraph "홈 서버 내부"
+                                        OP_API[API]
+                                        OP_Redis[(Redis)]
+                                        OP_MySQL[(MySQL)]
+                                    end
+                                end
+
+                                subgraph "AWS 환경 (콜드 스탠바이)"
+                                    AWS[AWS 서버]
+                                    subgraph "AWS 서버 내부"
+                                        AWS_API[EC2 t3.xlarge - API]
+                                        AWS_Redis[(EC2 t3.large - Redis)]
+                                        AWS_MySQL[(RDS m5.large - MySQL)]
+                                    end
+                                end
+
+                                ALB -->|정상 상태| OP_API
+                                ALB -.->|API 서버 장애 시| AWS_API
+                                OP_API --> OP_Redis
+                                OP_API -->|정상 상태| OP_MySQL
+                                AWS_API -.-> |API 서버 장애 시|OP_Redis
+                                AWS_API -.-> OP_MySQL
+                                OP_API -.->|Redis 장애 시| AWS_Redis
+                                OP_API -.->|MySQL 장애 시| AWS_MySQL
+                                AWS_API -->|필요 시| AWS_Redis
+                                AWS_API -->|필요 시| AWS_MySQL
+
+                                subgraph "모니터링 & 제어"
+                                    CW[CloudWatch]
+                                    Lambda[AWS Lambda]
+                                end
+
+                                CW --> OP
+                                CW --> AWS
+                                Lambda -->|장애 감지 & 전환| ALB
+
+                                subgraph "데이터 동기화"
+                                    DMS[EC2 t3.micro - MySQL]
+                                    RS[EC2 t2.micro swap 8gb - Redis]
+                                end
+
+                                OP_MySQL -->|복제| DMS
+                                DMS --> AWS_MySQL
+                                OP_Redis -->|복제| RS
+                                RS -->|복원| AWS_Redis
+
+                                VPN{Site-to-Site VPN}
+                                OP <--> VPN <--> AWS
+
+                                classDef onprem fill:#f9f,stroke:#333,stroke-width:2px;
+                                classDef aws fill:#ff9,stroke:#333,stroke-width:2px;
+                                classDef network fill:#0f6,stroke:#333,stroke-width:2px;
+                                class OP,OP_API,OP_Redis,OP_MySQL onprem;
+                                class AWS_API,AWS_Redis,AWS_MySQL,CW,Lambda,DMS,RS aws;
+                                class ALB,VPN network;'
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body text-center">
+                  <img th:src="@{/aws.ico}" alt="AWS" class="resource-icon" />
+                  <h5 class="card-title">AWS</h5>
+                  <p class="card-text">개발서버 배포 관리</p>
+                  <a
+                    href="https://ap-northeast-2.console.aws.amazon.com/console/home?region=ap-northeast-2"
+                    class="btn btn-primary btn-custom"
+                    target="_blank"
+                    >Visit Site</a
+                  >
+                  <button
+                    class="btn btn-secondary btn-custom mt-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#infoModal-1"
+                  >
+                    More Info
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body text-center">
+                  <img th:src="@{/confluence.ico}" alt="Confluence" class="resource-icon" />
+                  <h5 class="card-title">Confluence</h5>
+                  <p class="card-text">일정 관리 및 컨벤션</p>
+                  <a
+                    href="https://tonggangag.atlassian.net/wiki/home"
+                    class="btn btn-primary btn-custom"
+                    target="_blank"
+                    >Visit Site</a
+                  >
+                  <button
+                    class="btn btn-secondary btn-custom mt-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#infoModal-2"
+                  >
+                    More Info
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body text-center">
+                  <img th:src="@{/github.ico}" alt="GitHub" class="resource-icon" />
+                  <h5 class="card-title">GitHub</h5>
+                  <p class="card-text">팀 코드 저장소</p>
+                  <a href="https://github.com/sungwon2598/teamSe" class="btn btn-primary btn-custom" target="_blank"
+                    >Backend Repo</a
+                  >
+                  <a
+                    href="https://github.com/pillow12360/ict-project"
+                    class="btn btn-primary btn-custom"
+                    target="_blank"
+                    >Frontend Repo</a
+                  >
+                  <button
+                    class="btn btn-secondary btn-custom mt-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#infoModal-3"
+                  >
+                    More Info
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body text-center">
+                  <img th:src="@{jira.ico}" alt="Jira" class="resource-icon" />
+                  <h5 class="card-title">Jira</h5>
+                  <p class="card-text">이슈관리</p>
+                  <a
+                    href="https://tonggangag.atlassian.net/jira/software/projects/KAN/boards/1"
+                    class="btn btn-primary btn-custom"
+                    target="_blank"
+                    >Visit Site</a
+                  >
+                  <button
+                    class="btn btn-secondary btn-custom mt-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#infoModal-4"
+                  >
+                    More Info
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!--                <div class="col">-->
+            <!--                    <div class="card h-100">-->
+            <!--                        <div class="card-body text-center">-->
+            <!--                            <img th:src="@{/notion.ico}" alt="Notion" class="resource-icon">-->
+            <!--                            <h5 class="card-title">Notion</h5>-->
+            <!--                            <p class="card-text">기타/임시 문서</p>-->
+            <!--                            <a href="https://www.notion.so" class="btn btn-primary btn-custom" target="_blank">Visit Site</a>-->
+            <!--                            <button class="btn btn-secondary btn-custom mt-2" data-bs-toggle="modal" data-bs-target="#infoModal-5">More Info</button>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body text-center">
+                  <img th:src="@{/slack.ico}" alt="Slack" class="resource-icon" />
+                  <h5 class="card-title">Slack</h5>
+                  <p class="card-text">팀 협업 채널</p>
+                  <a
+                    href="https://app.slack.com/client/T07GWRCMT55/D07GWT6J6BH"
+                    class="btn btn-primary btn-custom"
+                    target="_blank"
+                    >Visit Site</a
+                  >
+                  <button
+                    class="btn btn-secondary btn-custom mt-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#infoModal-6"
+                  >
+                    More Info
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body text-center">
+                  <img th:src="@{/swagger.ico}" alt="Swagger" class="resource-icon" />
+                  <h5 class="card-title">Swagger</h5>
+                  <p class="card-text">API문서 자동화 툴</p>
+                  <a
+                    href="http://3.39.12.17:8080/swagger-ui/index.html#"
+                    class="btn btn-primary btn-custom"
+                    target="_blank"
+                    >Visit Site</a
+                  >
+                  <button
+                    class="btn btn-secondary btn-custom mt-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#infoModal-7"
+                  >
+                    More Info
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="helpModalLabel">Help & Information</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>해당 대시보드는 TeamS의 협업을 위한 페이지 입니다.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resource Info Modals -->
+    <!-- AWS Modal -->
+    <div id="infoModal-1" class="modal fade" tabindex="-1" aria-labelledby="infoModalLabel-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel-1">AWS 정보</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              AWS(Amazon Web Services)는 아마존에서 제공하는 클라우드 컴퓨팅 플랫폼입니다. 우리 팀은 다음과 같이
+              사용하고 있습니다:
+            </p>
+            <ul>
+              <li>
+                <strong>EC2(Elastic Compute Cloud):</strong> 스프링부트 애플리케이션을 호스팅하는 가상 서버입니다.
+              </li>
+              <li>
+                <strong>RDS(Relational Database Service):</strong> MySQL 데이터베이스를 관리하는 서비스로, 데이터 저장
+                및 관리에 사용됩니다.
+              </li>
+              <li>
+                <strong>CloudWatch:</strong> 애플리케이션과 인프라의 성능을 모니터링하고 로그를 관리하는 도구입니다.
+              </li>
+            </ul>
+            <p>이 플랫폼을 통해 우리는 안정적이고 확장 가능한 웹 서비스를 구축 및 운영하고 있습니다.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <a
+              href="https://ap-northeast-2.console.aws.amazon.com/console/home?region=ap-northeast-2"
+              class="btn btn-primary"
+              target="_blank"
+              >사이트 방문</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confluence Modal -->
+    <div id="infoModal-2" class="modal fade" tabindex="-1" aria-labelledby="infoModalLabel-2" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel-2">Confluence 정보</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Confluence는 팀 협업을 위한 문서 작성 및 지식 공유 플랫폼입니다. 우리 팀은 다음과 같이 활용하고 있습니다:
+            </p>
+            <ul>
+              <li><strong>일정 관리:</strong> 프로젝트 타임라인, 마일스톤, 회의 일정 등을 관리합니다.</li>
+              <li>
+                <strong>컨벤션 문서화:</strong> 코딩 스타일, 네이밍 규칙, 깃 사용 규칙 등 팀 내 표준을 정의하고
+                공유합니다.
+              </li>
+              <li>
+                <strong>회의록:</strong> 모든 회의 내용을 기록하고 공유하여 팀원 모두가 최신 정보를 파악할 수 있게
+                합니다.
+              </li>
+              <li>
+                <strong>기술 문서:</strong> 시스템 아키텍처, API 설계, 데이터베이스 스키마 등의 기술 문서를 작성하고
+                관리합니다.
+              </li>
+            </ul>
+            <p>
+              Confluence를 통해 팀 전체의 지식과 정보를 체계적으로 관리하고, 효율적인 협업 환경을 구축하고 있습니다.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <a href="https://tonggangag.atlassian.net/wiki/home" class="btn btn-primary" target="_blank">사이트 방문</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GitHub Modal -->
+    <div id="infoModal-3" class="modal fade" tabindex="-1" aria-labelledby="infoModalLabel-3" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel-3">GitHub 정보</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              GitHub는 버전 관리와 협업을 위한 코드 호스팅 플랫폼입니다. 우리 팀의 GitHub 사용 방식은 다음과 같습니다:
+            </p>
+            <ul>
+              <li><strong>코드 저장소:</strong> 모든 프로젝트 코드를 중앙 저장소에서 관리합니다.</li>
+              <li>
+                <strong>브랜치 전략:</strong> feature, develop, main 브랜치를 사용하여 체계적인 개발 프로세스를
+                유지합니다.
+              </li>
+              <li>
+                <strong>풀 리퀘스트:</strong> 코드 리뷰와 품질 관리를 위해 모든 변경사항은 풀 리퀘스트를 통해
+                병합됩니다.
+              </li>
+              <li><strong>이슈 트래킹:</strong> 버그 리포트, 기능 요청 등을 GitHub 이슈를 통해 관리합니다.</li>
+              <li>
+                <strong>CI/CD:</strong> GitHub Actions를 이용해 자동화된 테스트와 배포 파이프라인을 구축하고 있습니다.
+              </li>
+            </ul>
+            <p>GitHub를 통해 우리 팀은 효율적인 코드 관리와 협업 체계를 구축하고 있습니다.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <a href="https://github.com/sungwon2598/teamSe" class="btn btn-primary" target="_blank">사이트 방문</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jira Modal -->
+    <div id="infoModal-4" class="modal fade" tabindex="-1" aria-labelledby="infoModalLabel-4" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel-4">Jira 정보</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Jira는 애자일 프로젝트 관리를 위한 강력한 도구입니다. 우리 팀은 Jira를 다음과 같이 활용하고 있습니다:</p>
+            <ul>
+              <li>
+                <strong>이슈 관리:</strong> 모든 작업 항목(태스크, 버그, 스토리 등)을 Jira 이슈로 생성하고 추적합니다.
+              </li>
+              <li><strong>스프린트 계획:</strong> 2주 단위의 스프린트를 계획하고 관리합니다.</li>
+              <li>
+                <strong>칸반 보드:</strong> 작업의 진행 상황을 시각적으로 관리하고 팀의 워크플로우를 최적화합니다.
+              </li>
+              <li><strong>백로그 관리:</strong> 제품 백로그를 관리하고 우선순위를 지정합니다.</li>
+              <li><strong>보고서:</strong> 번다운 차트, 속도 차트 등을 통해 팀의 성과를 분석합니다.</li>
+            </ul>
+            <p>Jira를 통해 우리는 프로젝트의 진행 상황을 효과적으로 추적하고, 팀의 생산성을 향상시키고 있습니다.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <a href="https://www.atlassian.com/software/jira" class="btn btn-primary" target="_blank">사이트 방문</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notion Modal -->
+    <!--<div id="infoModal-5" class="modal fade" tabindex="-1" aria-labelledby="infoModalLabel-5" aria-hidden="true">-->
+    <!--    <div class="modal-dialog">-->
+    <!--        <div class="modal-content">-->
+    <!--            <div class="modal-header">-->
+    <!--                <h5 class="modal-title" id="infoModalLabel-5">Notion 정보</h5>-->
+    <!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+    <!--            </div>-->
+    <!--            <div class="modal-body">-->
+    <!--                <p>Notion은 올인원 워크스페이스 도구로, 우리 팀은 주로 다음과 같은 용도로 활용하고 있습니다:</p>-->
+    <!--                <ul>-->
+    <!--                    <li><strong>아이디어 공유:</strong> 브레인스토밍 세션의 결과나 개인적인 프로젝트 아이디어를 기록합니다.</li>-->
+    <!--                    <li><strong>임시 문서 작성:</strong> 빠르게 정보를 정리하거나 초안을 작성할 때 사용합니다.</li>-->
+    <!--                    <li><strong>개인 작업 관리:</strong> 팀원들의 개인 할 일 목록이나 노트를 관리합니다.</li>-->
+    <!--                    <li><strong>리소스 라이브러리:</strong> 유용한 링크, 문서, 가이드라인 등을 정리하고 공유합니다.</li>-->
+    <!--                    <li><strong>회의 준비:</strong> 회의 안건을 정리하거나 프레젠테이션 초안을 작성합니다.</li>-->
+    <!--                </ul>-->
+    <!--                <p>Notion은 Confluence나 Jira와 같은 공식 문서나 이슈 트래킹에는 사용하지 않지만, 보다 유연하고 빠른 정보 공유와 개인 생산성 향상을 위해 활용하고 있습니다.</p>-->
+    <!--            </div>-->
+    <!--            <div class="modal-footer">-->
+    <!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>-->
+    <!--                <a href="https://www.notion.so" class="btn btn-primary" target="_blank">사이트 방문</a>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--</div>-->
+
+    <!-- Slack Modal -->
+    <div id="infoModal-6" class="modal fade" tabindex="-1" aria-labelledby="infoModalLabel-6" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel-6">Slack 정보</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Slack은 우리 팀의 핵심 커뮤니케이션 및 알림 플랫폼입니다. 다음과 같이 활용하고 있습니다:</p>
+            <ul>
+              <li><strong>실시간 소통:</strong> 팀원 간 빠른 질문, 답변, 정보 공유를 위해 사용합니다.</li>
+              <li><strong>채널 구성:</strong> 프로젝트별, 주제별로 채널을 만들어 관련 대화를 구분합니다.</li>
+              <li>
+                <strong>백엔드/프론트엔드 GitHub 알림:</strong>
+                <ul>
+                  <li>Pull Request 생성 및 업데이트 시 알림</li>
+                  <li>커밋 발생 시 알림</li>
+                  <li>브랜치 병합 시 알림</li>
+                </ul>
+              </li>
+              <li>
+                <strong>AWS 연동 알림:</strong>
+                <ul>
+                  <li>EC2 인스턴스 상태 변경 또는 이상 발생 시 알림</li>
+                  <li>RDS 데이터베이스 성능 이슈 또는 이상 발생 시 알림</li>
+                  <li>CloudWatch 경보 트리거 시 알림</li>
+                </ul>
+              </li>
+              <li>
+                <strong>팀 회의 진행:</strong>
+                <ul>
+                  <li>일일 스크럼 미팅을 팀 채널에서 진행</li>
+                  <li>주간 회의 및 스프린트 리뷰/계획 미팅을 화상 통화로 진행</li>
+                  <li>긴급 이슈 발생 시 즉시 음성 채널을 통해 미팅 소집</li>
+                </ul>
+              </li>
+              <li><strong>파일 공유:</strong> 문서, 이미지, 코드 스니펫 등을 쉽게 공유합니다.</li>
+              <li>
+                <strong>봇 통합:</strong> GitHub, Jira, AWS 등의 서비스와 연동하여 자동화된 워크플로우를 구축합니다.
+              </li>
+            </ul>
+            <p>
+              Slack을 통해 우리 팀은 실시간으로 프로젝트 상황을 공유하고, 신속하게 의사결정을 내리며, 효율적인 협업
+              환경을 유지하고 있습니다.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <a href="https://app.slack.com/client/T07GWRCMT55/D07GWT6J6BH" class="btn btn-primary" target="_blank"
+              >사이트 방문</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Swagger Modal -->
+    <div id="infoModal-7" class="modal fade" tabindex="-1" aria-labelledby="infoModalLabel-7" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel-7">Swagger 정보</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Swagger는 우리 팀의 API 개발과 문서화를 위한 핵심 도구입니다. 다음과 같이 활용하고 있습니다:</p>
+            <ul>
+              <li>
+                <strong>API 문서 자동화:</strong>
+                <ul>
+                  <li>코드에 애노테이션을 추가하여 API 스펙을 자동으로 생성합니다.</li>
+                  <li>엔드포인트, 요청/응답 모델, 파라미터 등을 자동으로 문서화합니다.</li>
+                </ul>
+              </li>
+              <li>
+                <strong>실시간 API 테스트:</strong>
+                <ul>
+                  <li>Swagger UI를 통해 API를 직접 호출하고 결과를 확인할 수 있습니다.</li>
+                  <li>개발 단계에서 빠른 API 테스트와 디버깅이 가능합니다.</li>
+                </ul>
+              </li>
+              <li>
+                <strong>프론트엔드-백엔드 협업:</strong>
+                <ul>
+                  <li>프론트엔드 개발자가 최신 API 스펙을 쉽게 확인할 수 있습니다.</li>
+                  <li>API 변경 사항을 실시간으로 공유하여 개발 효율성을 높입니다.</li>
+                </ul>
+              </li>
+              <li>
+                <strong>API 버전 관리:</strong>
+                <ul>
+                  <li>여러 버전의 API를 동시에 문서화하고 관리할 수 있습니다.</li>
+                  <li>API 변경 이력을 추적하기 쉽습니다.</li>
+                </ul>
+              </li>
+              <li>
+                <strong>클라이언트 SDK 생성:</strong>
+                <ul>
+                  <li>Swagger 스펙을 기반으로 다양한 언어의 클라이언트 SDK를 자동 생성할 수 있습니다.</li>
+                </ul>
+              </li>
+              <li>
+                <strong>API 설계 및 모킹:</strong>
+                <ul>
+                  <li>실제 구현 전에 API 설계를 시각화하고 검토할 수 있습니다.</li>
+                  <li>Swagger를 이용한 API 모킹으로 프론트엔드 개발을 병행할 수 있습니다.</li>
+                </ul>
+              </li>
+            </ul>
+            <p>
+              Swagger를 통해 우리 팀은 API 개발 프로세스를 표준화하고, 문서화에 드는 시간을 절약하며, 프론트엔드와
+              백엔드 간의 원활한 협업을 실현하고 있습니다.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <a href="http://3.39.12.17:8080/swagger-ui/index.html#" class="btn btn-primary" target="_blank"
+              >사이트 방문</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add similar modal structures for GitHub, Jira, Notion, Slack, and Swagger -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+
+      // Mermaid 초기화
+      mermaid.initialize({ startOnLoad: true });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // 개발서버 아키텍처 다이어그램 렌더링
+        var devDiagramDiv = document.getElementById('mermaidDiagram');
+        var devDiagramDefinition = devDiagramDiv.getAttribute('data-diagram');
+
+        mermaid.render('dev-mermaid-svg', devDiagramDefinition).then(function (result) {
+          devDiagramDiv.innerHTML = result.svg;
+        });
+
+        // 운영서버 아키텍처 다이어그램 렌더링
+        var prodDiagramDiv = document.getElementById('productionMermaidDiagram');
+        var prodDiagramDefinition = prodDiagramDiv.getAttribute('data-diagram');
+
+        mermaid.render('prod-mermaid-svg', prodDiagramDefinition).then(function (result) {
+          prodDiagramDiv.innerHTML = result.svg;
+        });
+      });
+    </script>
+  </body>
+</html>
