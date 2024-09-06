@@ -89,6 +89,21 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               </Typography>
             </Box>
 
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: 'flex',
+                justifyContent: { xs: 'right', md: 'flex-start' },
+              }}
+            >
+              <MenuItem component={Link} to="/">
+                Home
+              </MenuItem>
+              <MenuItem component={Link} to="/dashboard">
+                DashBoard
+              </MenuItem>
+            </Box>
+
             {/* 사용자 메뉴 및 로그인 버튼: 오른쪽에 위치 */}
             <Box
               sx={{
