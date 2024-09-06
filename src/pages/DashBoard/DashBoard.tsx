@@ -1,9 +1,11 @@
 // Dashboard.tsx
 import React from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Typography, Container } from '@mui/material';
 import ToolCard from './ToolCard';
+import MermaidDiagram from './Diagram/MermaidDiagram';
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
+  // Mermaid 다이어그램 정의
   const tools = [
     {
       name: 'AWS',
@@ -49,22 +51,86 @@ const Dashboard = () => {
     },
   ];
 
+  const diagramDefinition = `flowchart TB
+    subgraph GitHub ["GitHub"]
+      direction TB
+      GH_BE["백엔드 레포지토리"]
+      GH_FE["프론트엔드 레포지토리"]
+      GH_ACTION_BE["GitHub Actions 백엔드"]
+      GH_ACTION_FE["GitHub Actions 프론트엔드"]
+      GH_BE --> GH_ACTION_BE
+      GH_FE --> GH_ACTION_FE
+    end
+    subgraph AWS ["AWS"]
+      direction TB
+      subgraph Compute ["Compute & Storage"]
+        subgraph EC2 ["EC2"]
+          SPRING["Spring Boot"]
+          SWAGGER["Swagger"]
+          SPRING --- SWAGGER
+        end
+        S3["S3 React"]
+      end
+      subgraph Database ["Database"]
+        RDS["RDS MySQL"]
+        REDIS["ElastiCache Redis"]
+      end
+      CW["CloudWatch"]
+    end
+    SLACK["Slack"]
+    GH_BE & GH_FE -->|변경/커밋/PR 알림| SLACK
+    GH_ACTION_BE -->|배포| EC2
+    GH_ACTION_FE -->|배포| S3
+    EC2 <--> RDS & REDIS
+    CW -->|알림| SLACK
+    CW -.->|모니터링| EC2 & RDS & S3
+    classDef awsColor fill:#FF9900,stroke:#232F3E,color:#232F3E;
+    classDef githubColor fill:#24292E,stroke:#000000,color:#FFFFFF;
+    classDef slackColor fill:#4A154B,stroke:#000000,color:#FFFFFF;
+    classDef swaggerColor fill:#85EA2D,stroke:#173647,color:#173647;
+    class EC2,S3,RDS,REDIS,CW awsColor;
+    class GH_BE,GH_FE,GH_ACTION_BE,GH_ACTION_FE githubColor;
+    class SLACK slackColor;
+    class SWAGGER swaggerColor   `;
+
   return (
-    <Box sx={{ flexGrow: 1, padding: '20px' }}>
-      <Grid container spacing={4}>
-        {tools.map((tool, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <ToolCard
-              name={tool.name}
-              description={tool.description}
-              iconUri={tool.iconUri}
-              siteUrl={tool.siteUrl}
-              details={tool.details}
-            />
+    <>
+      <Box sx={{ flexGrow: 1, padding: '20px' }}>
+        <Grid container spacing={4}>
+          {tools.map((tool, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <ToolCard
+                name={tool.name}
+                description={tool.description}
+                iconUri={tool.iconUri}
+                siteUrl={tool.siteUrl}
+                details={tool.details}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
+      <Container>
+        <Typography variant="h4" component="h1" sx={{ marginBottom: '20px', textAlign: 'center' }}>
+          Dashboard Overview
+        </Typography>
+
+        {/* 대시보드 레이아웃 */}
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <Box sx={{ textAlign: 'center', padding: '20px', boxShadow: 3, borderRadius: '12px' }}>
+              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                프로젝트 아키텍처
+              </Typography>
+
+              {/* Mermaid 다이어그램 렌더링 */}
+              <MermaidDiagram diagramDefinition={diagramDefinition} />
+            </Box>
           </Grid>
-        ))}
-      </Grid>
-    </Box>
+        </Grid>
+      </Container>
+    </>
   );
 };
 
