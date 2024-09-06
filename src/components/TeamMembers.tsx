@@ -67,9 +67,9 @@ const teamMembers: TeamMember[] = [
       { name: 'Java', iconUri: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
       { name: 'Spring', iconUri: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg' },
     ],
-    imageSrc: 'https://www.fitpetmall.com/wp-content/uploads/2023/10/shutterstock_1275055966-1.png',
-    email: 'example@gmail.com',
-    github: 'https://github.com/exampleUser3', // GitHub 주소
+    imageSrc: 'https://avatars.githubusercontent.com/u/87975257?v=4',
+    email: 'tonggangag@naver.com',
+    github: 'https://github.com/Gogogo10102', // GitHub 주소
   },
   {
     name: '홍정기',
@@ -78,10 +78,9 @@ const teamMembers: TeamMember[] = [
       { name: 'Java', iconUri: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
       { name: 'Spring', iconUri: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg' },
     ],
-    imageSrc:
-      'https://product.cdn.cevaws.com/var/storage/images/_aliases/reference/media/feliway-2017/images/kor-kr/1_gnetb-7sfmbx49emluey4a/6341829-1-kor-KR/1_gNETb-7SfMBX49EMLUeY4A.jpg',
-    email: 'example@gmail.com',
-    github: 'https://github.com/exampleUser4', // GitHub 주소
+    imageSrc: 'https://avatars.githubusercontent.com/u/132039104?v=4',
+    email: 'tony9800@naver.com',
+    github: 'https://github.com/hjg727', // GitHub 주소
   },
   {
     name: '심혜원',
