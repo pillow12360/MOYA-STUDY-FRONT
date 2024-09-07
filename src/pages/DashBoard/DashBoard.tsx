@@ -10,7 +10,7 @@ const Dashboard: React.FC = () => {
     {
       name: 'AWS',
       description: '개발서버 배포 관리',
-      iconUri: '/path-to-aws-icon', // 아이콘 경로를 설정해주세요.
+      iconUri: '/path-to-aws-icon',
       siteUrl: 'https://ap-northeast-2.console.aws.amazon.com/console/home?region=ap-northeast-2',
       details: 'AWS는 아마존에서 제공하는 클라우드 컴퓨팅 플랫폼으로, 우리 팀은 EC2와 RDS 서비스를 사용하고 있습니다.',
     },
