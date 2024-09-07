@@ -17,6 +17,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import getLPTheme from './themes/getLPTheme';
 import store from '@store/Store';
 import { Provider } from 'react-redux';
+import RandomVoiceChat from './pages/RandomVoiceChat/RandomVoiceChat';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -86,6 +87,7 @@ const App: React.FC = () => {
             <Route path="/project" element={<ProjectPage />} />
             <Route path="/SignIn" element={<SignIn />} />
             <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/randomvoicechat" element={<RandomVoiceChat />} />
           </Routes>
           <Footer mode={mode} toggleColorMode={toggleColorMode} />
         </Box>
