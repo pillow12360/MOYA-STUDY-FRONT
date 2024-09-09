@@ -1,91 +1,122 @@
-// Dashboard.tsx
-import React from 'react';
-import { Box, Grid, Typography, Container } from '@mui/material';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Typography, Container, Grid, Paper, Box, Tab, Tabs } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ToolCard from './ToolCard';
+import MermaidDiagram from './MermaidDiagram'; // Mermaid 다이어그램 컴포넌트
 
-const Dashboard: React.FC = () => {
-  // Mermaid 다이어그램 정의
-  const tools = [
-    {
-      name: 'AWS',
-      description: '개발서버 배포 관리',
-      iconUri: '/path-to-aws-icon',
-      siteUrl: 'https://ap-northeast-2.console.aws.amazon.com/console/home?region=ap-northeast-2',
-      details: 'AWS는 아마존에서 제공하는 클라우드 컴퓨팅 플랫폼으로, 우리 팀은 EC2와 RDS 서비스를 사용하고 있습니다.',
+// MUI 테마 설정
+const theme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#1976d2',
     },
-    {
-      name: 'Confluence',
-      description: '일정 관리 및 컨벤션',
-      iconUri: '/path-to-confluence-icon',
-      siteUrl: 'https://tonggangag.atlassian.net/wiki/home',
-      details: 'Confluence는 팀 협업을 위한 문서 작성 및 관리 툴로, 프로젝트의 전반적인 일정 및 규칙을 관리합니다.',
+    secondary: {
+      main: '#dc004e',
     },
-    {
-      name: 'GitHub',
-      description: '팀 코드 저장소',
-      iconUri: '/path-to-github-icon',
-      siteUrl: 'https://github.com/sungwon2598/teamSe',
-      details: 'GitHub를 통해 코드의 버전 관리를 진행하며, 풀 리퀘스트와 코드 리뷰를 통해 협업을 강화하고 있습니다.',
-    },
-    {
-      name: 'Jira',
-      description: '이슈관리',
-      iconUri: '/path-to-jira-icon',
-      siteUrl: 'https://tonggangag.atlassian.net/jira/software/projects/KAN/boards/1',
-      details: 'Jira는 이슈 추적 및 스프린트 계획에 적합한 툴로, 팀의 진행 상황을 시각적으로 관리합니다.',
-    },
-    {
-      name: 'Slack',
-      description: '팀 협업 채널',
-      iconUri: '/path-to-slack-icon',
-      siteUrl: 'https://app.slack.com/client/T07GWRCMT55/D07GWT6J6BH',
-      details: 'Slack은 실시간 커뮤니케이션을 제공하며, GitHub 및 AWS 등과 통합하여 알림을 받을 수 있습니다.',
-    },
-    {
-      name: 'Swagger',
-      description: 'API문서 자동화 툴',
-      iconUri: '/path-to-swagger-icon',
-      siteUrl: 'http://3.39.12.17:8080/swagger-ui/index.html#',
-      details: 'Swagger는 API 문서화를 자동으로 생성해주며, 프론트엔드와 백엔드 개발자 간의 협업.',
-    },
-  ];
+  },
+});
+
+// 인프라 도구 데이터
+const infrastructureTools = [
+  {
+    name: 'AWS EC2',
+    description: '클라우드 컴퓨팅 서비스',
+    iconUri: 'https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png',
+    siteUrl: 'https://aws.amazon.com/ec2/',
+    details:
+      'Amazon Elastic Compute Cloud(EC2)는 안전하고 크기 조정이 가능한 컴퓨팅 파워를 클라우드에서 제공하는 웹 서비스입니다.',
+  },
+  {
+    name: 'Azure SQL',
+    description: '클라우드 데이터베이스 서비스',
+    iconUri: 'https://azure.microsoft.com/svghandler/sql-database/?width=300&height=300',
+    siteUrl: 'https://azure.microsoft.com/en-us/products/azure-sql/',
+    details: 'Azure SQL은 항상 최신 상태로 완전히 관리되는 SQL Server 데이터베이스 엔진을 클라우드에서 제공합니다.',
+  },
+];
+
+// 협업 도구 데이터
+const collaborationTools = [
+  {
+    name: 'Slack',
+    description: '팀 커뮤니케이션 플랫폼',
+    iconUri: 'https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_hash_colored.png',
+    siteUrl: 'https://slack.com/',
+    details: 'Slack은 팀이 함께 일하고, 협력하고, 소통할 수 있는 중앙 허브입니다.',
+  },
+  {
+    name: 'GitHub',
+    description: '버전 관리 및 협업 플랫폼',
+    iconUri: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png',
+    siteUrl: 'https://github.com/',
+    details: 'GitHub는 소프트웨어 개발을 위한 버전 제어 및 협업 플랫폼입니다.',
+  },
+];
+
+// 아키텍처 다이어그램 데이터 (Mermaid 문법)
+const architectureDiagram = `
+graph TD
+    A[프론트엔드] -->|API 요청| B(API 게이트웨이)
+    B --> C{로드 밸런서}
+    C -->|요청 분배| D[마이크로서비스 1]
+    C -->|요청 분배| E[마이크로서비스 2]
+    C -->|요청 분배| F[마이크로서비스 3]
+    D --> G[(데이터베이스)]
+    E --> G
+    F --> G
+`;
+
+export default function EnhancedArchitectureDashboard() {
+  const [tabValue, setTabValue] = useState(0); // 탭 상태 관리
+
+  // 탭 변경 핸들러
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
 
   return (
-    <>
-      <Box sx={{ flexGrow: 1, padding: '20px' }}>
-        <Grid container spacing={4}>
-          {tools.map((tool, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <ToolCard
-                name={tool.name}
-                description={tool.description}
-                iconUri={tool.iconUri}
-                siteUrl={tool.siteUrl}
-                details={tool.details}
-              />
-            </Grid>
-          ))}
-        </Grid>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ flexGrow: 1 }}>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Paper sx={{ p: 2 }}>
+            <Tabs value={tabValue} onChange={handleTabChange} centered>
+              <Tab label="인프라 도구" />
+              <Tab label="협업 도구" />
+              <Tab label="아키텍처 다이어그램" />
+            </Tabs>
+          </Paper>
+          <Box sx={{ mt: 2 }}>
+            {tabValue === 0 && (
+              <Grid container spacing={3}>
+                {infrastructureTools.map((tool, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
+                    <ToolCard {...tool} />
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+            {tabValue === 1 && (
+              <Grid container spacing={3}>
+                {collaborationTools.map((tool, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
+                    <ToolCard {...tool} />
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+            {tabValue === 2 && (
+              <Paper sx={{ p: 2, mt: 2 }}>
+                <Typography variant="h6" gutterBottom>
+                  시스템 아키텍처 다이어그램
+                </Typography>
+                {/* Mermaid 다이어그램 컴포넌트 */}
+                <MermaidDiagram diagram={architectureDiagram} />
+              </Paper>
+            )}
+          </Box>
+        </Container>
       </Box>
-
-      <Container>
-        <Typography variant="h4" component="h1" sx={{ marginBottom: '20px', textAlign: 'center' }}>
-          Dashboard Overview
-        </Typography>
-
-        {/* 대시보드 레이아웃 */}
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <Box sx={{ textAlign: 'center', padding: '20px', boxShadow: 3, borderRadius: '12px' }}>
-              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
-                프로젝트 아키텍처
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Container>
-    </>
+    </ThemeProvider>
   );
-};
-
-export default Dashboard;
+}
