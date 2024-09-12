@@ -9,14 +9,16 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ diagram }) => {
   const diagramRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Mermaid 초기화
+    mermaid.initialize({ startOnLoad: true });
+
     const renderDiagram = async () => {
       if (diagramRef.current) {
         try {
-          // Mermaid 초기화
-          mermaid.initialize({ startOnLoad: false });
-
+          // 고유한 ID 생성
+          const diagramId = `mermaid-diagram-${Math.random().toString(36).substring(2, 9)}`;
           // Mermaid 다이어그램 렌더링
-          const { svg } = await mermaid.render('mermaid-diagram', diagram);
+          const { svg } = await mermaid.render(diagramId, diagram);
           diagramRef.current.innerHTML = svg;
         } catch (error) {
           console.error('Mermaid diagram rendering failed:', error);

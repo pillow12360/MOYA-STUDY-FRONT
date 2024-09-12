@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Container, Grid, Paper, Box, Tab, Tabs } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ToolCard from './ToolCard';
-import MermaidDiagram from './MermaidDiagram'; // Mermaid 다이어그램 컴포넌트
 
 // MUI 테마 설정
 const theme = createTheme({
@@ -55,17 +54,6 @@ const collaborationTools = [
 ];
 
 // 아키텍처 다이어그램 데이터 (Mermaid 문법)
-const architectureDiagram = `
-graph TD
-    A[프론트엔드] -->|API 요청| B(API 게이트웨이)
-    B --> C{로드 밸런서}
-    C -->|요청 분배| D[마이크로서비스 1]
-    C -->|요청 분배| E[마이크로서비스 2]
-    C -->|요청 분배| F[마이크로서비스 3]
-    D --> G[(데이터베이스)]
-    E --> G
-    F --> G
-`;
 
 export default function EnhancedArchitectureDashboard() {
   const [tabValue, setTabValue] = useState(0); // 탭 상태 관리
@@ -88,7 +76,9 @@ export default function EnhancedArchitectureDashboard() {
           </Paper>
           <Box sx={{ mt: 2 }}>
             {tabValue === 0 && (
-              <Grid container spacing={3}>
+              <Grid container spacing={3} alignItems="stretch">
+                {' '}
+                {/* 카드 높이 균일화 */}
                 {infrastructureTools.map((tool, index) => (
                   <Grid item xs={12} sm={6} md={4} key={index}>
                     <ToolCard {...tool} />
@@ -97,7 +87,9 @@ export default function EnhancedArchitectureDashboard() {
               </Grid>
             )}
             {tabValue === 1 && (
-              <Grid container spacing={3}>
+              <Grid container spacing={3} alignItems="stretch">
+                {' '}
+                {/* 카드 높이 균일화 */}
                 {collaborationTools.map((tool, index) => (
                   <Grid item xs={12} sm={6} md={4} key={index}>
                     <ToolCard {...tool} />
@@ -111,7 +103,6 @@ export default function EnhancedArchitectureDashboard() {
                   시스템 아키텍처 다이어그램
                 </Typography>
                 {/* Mermaid 다이어그램 컴포넌트 */}
-                <MermaidDiagram diagram={architectureDiagram} />
               </Paper>
             )}
           </Box>
