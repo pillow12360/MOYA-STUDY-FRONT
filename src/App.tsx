@@ -18,6 +18,7 @@ import getLPTheme from './themes/getLPTheme';
 import store from '@store/Store';
 import { Provider } from 'react-redux';
 import Dashboard from './pages/DashBoard/DashBoard';
+import Calendar from './pages/Calendar/Calendar';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -88,6 +89,7 @@ const App: React.FC = () => {
             <Route path="/SignIn" element={<SignIn />} />
             <Route path="/SignUp" element={<SignUp />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/calendar" element={<Calendar />} />
           </Routes>
           <Footer mode={mode} toggleColorMode={toggleColorMode} />
         </Box>

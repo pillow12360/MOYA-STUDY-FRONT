@@ -66,12 +66,11 @@ export default function EnhancedArchitectureDashboard() {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }}>
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="lg" sx={{ mt: 2, mb: 2 }}>
           <Paper sx={{ p: 2 }}>
             <Tabs value={tabValue} onChange={handleTabChange} centered>
               <Tab label="인프라 도구" />
               <Tab label="협업 도구" />
-              <Tab label="아키텍처 다이어그램" />
             </Tabs>
           </Paper>
           <Box sx={{ mt: 2 }}>
