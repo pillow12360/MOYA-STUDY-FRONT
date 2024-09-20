@@ -105,6 +105,9 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               <MenuItem component={Link} to="/randomvoicechat">
                 Random Voice Chat
               </MenuItem>
+              <MenuItem component={Link} to="/calendar">
+                Calendar
+              </MenuItem>
             </Box>
 
             {/* 사용자 메뉴 및 로그인 버튼: 오른쪽에 위치 */}
