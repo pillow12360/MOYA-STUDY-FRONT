@@ -17,7 +17,6 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import getLPTheme from './themes/getLPTheme';
 import store from '@store/Store';
 import { Provider } from 'react-redux';
-import RandomVoiceChat from './pages/RandomVoiceChat/RandomVoiceChat';
 import Dashboard from './pages/DashBoard/DashBoard';
 import Calendar from './pages/Calendar/Calendar';
 import TldrawPage from './pages/tldraw/TlrawPage';
