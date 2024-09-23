@@ -10,7 +10,7 @@ const ProjectPage: React.FC = () => {
       <Box sx={{ padding: '50px 0' }}>
         <Container>
           <Typography variant="h4" component="h2" sx={{ marginBottom: '30px' }}>
-            모의 주식 투자 프로젝트
+            스터디 협업 툴
           </Typography>
         </Container>
       </Box>

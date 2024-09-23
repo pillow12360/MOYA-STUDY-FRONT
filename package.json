@@ -1,5 +1,5 @@
 {
-  "name": "ict-front",
+  "name": "TeamS-front",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -16,6 +16,7 @@
     "@mui/icons-material": "^6.0.0",
     "@mui/material": "^6.0.0",
     "@reduxjs/toolkit": "^2.2.7",
+    "@tldraw/tldraw": "^3.0.3",
     "axios": "^0.26.1",
     "core-js": "^3.15.1",
     "cross-env": "^7.0.3",
