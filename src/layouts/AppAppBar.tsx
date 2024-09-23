@@ -99,15 +99,6 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               <MenuItem component={Link} to="/">
                 Home
               </MenuItem>
-              <MenuItem component={Link} to="/dashboard">
-                DashBoard
-              </MenuItem>
-              <MenuItem component={Link} to="/randomvoicechat">
-                Random Voice Chat
-              </MenuItem>
-              <MenuItem component={Link} to="/calendar">
-                Calendar
-              </MenuItem>
               <MenuItem component={Link} to="/tldraw">
                 Tldraw
               </MenuItem>
@@ -174,23 +165,8 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 <MenuItem component={Link} to="/project">
                   Project
                 </MenuItem>
-                <MenuItem component={Link} to="/swagger">
-                  Swagger
-                </MenuItem>
-                <MenuItem component={Link} to="/dashboard">
-                  DashBoard
-                </MenuItem>
-                <MenuItem component={Link} to="/jira">
-                  Jira
-                </MenuItem>
-                <MenuItem component={Link} to="/slack">
-                  SLACK
-                </MenuItem>
-                <MenuItem component={Link} to="/about">
-                  About
-                </MenuItem>
-                <MenuItem component={Link} to="/contact">
-                  Contact
+                <MenuItem component={Link} to="/tldraw">
+                  Tldraw
                 </MenuItem>
                 <Divider />
                 {user ? (
