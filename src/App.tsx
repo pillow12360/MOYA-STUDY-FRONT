@@ -19,7 +19,7 @@ import store from '@store/Store';
 import { Provider } from 'react-redux';
 import Dashboard from './pages/DashBoard/DashBoard';
 import Calendar from './pages/Calendar/Calendar';
-import TldrawPage from './pages/tldraw/TlrawPage';
+import TldrawPage from './pages/tldraw/TldrawPage';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
