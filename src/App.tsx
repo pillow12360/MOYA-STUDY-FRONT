@@ -20,6 +20,7 @@ import { Provider } from 'react-redux';
 import RandomVoiceChat from './pages/RandomVoiceChat/RandomVoiceChat';
 import Dashboard from './pages/DashBoard/DashBoard';
 import Calendar from './pages/Calendar/Calendar';
+import TldrawPage from './pages/tldraw/TlrawPage';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -91,6 +92,7 @@ const App: React.FC = () => {
             <Route path="/SignUp" element={<SignUp />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/tldraw" element={<TldrawPage />} />
           </Routes>
           <Footer mode={mode} toggleColorMode={toggleColorMode} />
         </Box>

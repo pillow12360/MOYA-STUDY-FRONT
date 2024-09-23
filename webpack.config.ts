@@ -7,7 +7,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const config = {
-  name: 'ict-project',
+  name: 'TeamS-front',
   mode: isDevelopment ? 'development' : 'production',
   devtool: !isDevelopment ? 'hidden-source-map' : 'eval',
   resolve: {
