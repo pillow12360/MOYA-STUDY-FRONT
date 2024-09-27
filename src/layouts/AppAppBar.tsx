@@ -96,18 +96,6 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 justifyContent: { xs: 'right', md: 'flex-start' },
               }}
             >
-              <MenuItem component={Link} to="/">
-                Home
-              </MenuItem>
-              <MenuItem component={Link} to="/dashboard">
-                DashBoard
-              </MenuItem>
-              <MenuItem component={Link} to="/randomvoicechat">
-                Random Voice Chat
-              </MenuItem>
-              <MenuItem component={Link} to="/calendar">
-                Calendar
-              </MenuItem>
               <MenuItem component={Link} to="/tldraw">
                 Tldraw
               </MenuItem>
@@ -168,30 +156,10 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
                 </Box>
                 {/* Drawer 메뉴를 react-router-dom의 Link 컴포넌트로 변경 */}
-                <MenuItem component={Link} to="/">
-                  Home
+                <MenuItem component={Link} to="/tldraw">
+                  Tldraw
                 </MenuItem>
-                <MenuItem component={Link} to="/project">
-                  Project
-                </MenuItem>
-                <MenuItem component={Link} to="/swagger">
-                  Swagger
-                </MenuItem>
-                <MenuItem component={Link} to="/dashboard">
-                  DashBoard
-                </MenuItem>
-                <MenuItem component={Link} to="/jira">
-                  Jira
-                </MenuItem>
-                <MenuItem component={Link} to="/slack">
-                  SLACK
-                </MenuItem>
-                <MenuItem component={Link} to="/about">
-                  About
-                </MenuItem>
-                <MenuItem component={Link} to="/contact">
-                  Contact
-                </MenuItem>
+
                 <Divider />
                 {user ? (
                   <MenuItem>

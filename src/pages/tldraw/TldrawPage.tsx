@@ -3,8 +3,8 @@ import TldrawComponent from './TldrawComponent';
 
 const TldrawPage: React.FC = () => {
   return (
-    <div style={{ width: '80vw', height: '60vh' }}>
-      <h1>tldraw 라이브러리 예제</h1>
+    <div style={{ position: 'fixed', width: '95vw', height: '80vh' }}>
+      <h1>화이트보드</h1>
       <TldrawComponent />
     </div>
   );
