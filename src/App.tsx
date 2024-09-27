@@ -19,7 +19,7 @@ import store from '@store/Store';
 import { Provider } from 'react-redux';
 import Dashboard from './pages/DashBoard/DashBoard';
 import Calendar from './pages/Calendar/Calendar';
-import TldrawPage from './pages/tldraw/TldrawPage';
+import TldrawComponent from '@pages/tldraw/TldrawComponent';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -74,7 +74,7 @@ const App: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: '100vh',
-            paddingTop: '15%', // AppBar height adjustment
+            paddingTop: '10%', // AppBar height adjustment
             paddingBottom: '60px', // Extra padding if needed
             bgcolor: 'background.default',
           }}
@@ -91,10 +91,10 @@ const App: React.FC = () => {
             <Route path="/SignUp" element={<SignUp />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/calendar" element={<Calendar />} />
-            <Route path="/tldraw" element={<TldrawPage />} />
+            <Route path="/tldraw" element={<TldrawComponent />} />
           </Routes>
-          <Footer mode={mode} toggleColorMode={toggleColorMode} />
         </Box>
+        <Footer mode={mode} toggleColorMode={toggleColorMode} />
       </ThemeProvider>
     </Provider>
   );

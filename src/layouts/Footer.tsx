@@ -47,6 +47,9 @@ export default function StickyFooter({ mode, toggleColorMode }: AppAppBarProps) 
         <Box
           component="footer"
           sx={{
+            display: 'flex',
+            justifyContent: "space-around",  // 하위 요소 간의 간격을 자동으로 분배
+            alignItems: "center",
             py: 4,
             px: 2,
             mt: 'auto',
