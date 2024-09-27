@@ -1,54 +1,103 @@
 import React from 'react';
 import 'tldraw/tldraw.css';
 import { Tldraw, useEditor, getSnapshot, loadSnapshot } from '@tldraw/tldraw';
-import { Button, Box, Grid } from '@mui/material'; // MUI 컴포넌트 임포트
+import { Button, Box, Grid } from '@mui/material';
+import axios from 'axios'; // axios 모듈 임포트
 
-// SaveButton 컴포넌트
-const SaveButton: React.FC<{ documentId: string; userId: string }> = ({ documentId, userId }) => {
+// SaveDocumentButton 컴포넌트 (문서 저장 버튼)
+const SaveDocumentButton: React.FC<{ documentId: string }> = ({ documentId }) => {
   const editor = useEditor();
 
-  const handleSave = async () => {
+  const handleSaveDocument = async () => {
     if (!editor) return;
 
-    const { document, session } = getSnapshot(editor.store);
+    const { document } = getSnapshot(editor.store);
+    console.log('Saving session data:', document); // 세션 데이터를 콘솔에 출력
 
     try {
       await saveDocumentState(documentId, document);
-      await saveSessionState(documentId, userId, session);
     } catch (error) {
-      console.error('Error saving state:', error);
+      console.error('Error saving document:', error);
     }
     alert('문서가 저장되었습니다.');
   };
 
   return (
-    <Button variant="contained" color="secondary" onClick={handleSave}>
-      저장하기
+    <Button variant="contained" color="primary" onClick={handleSaveDocument}>
+      문서 저장하기
     </Button>
   );
 };
 
-// LoadButton 컴포넌트
-const LoadButton: React.FC<{ documentId: string; userId: string }> = ({ documentId, userId }) => {
+// SaveSessionButton 컴포넌트 (세션 저장 버튼)
+const SaveSessionButton: React.FC<{ documentId: string; userId: string }> = ({ documentId, userId }) => {
   const editor = useEditor();
 
-  const handleLoad = async () => {
+  const handleSaveSession = async () => {
+    if (!editor) return;
+    console.log('Saving session data:', document); // 세션 데이터를 콘솔에 출력
+
+    const { session } = getSnapshot(editor.store);
+
+    try {
+      await saveSessionState(documentId, userId, session);
+    } catch (error) {
+      console.error('Error saving session:', error);
+    }
+    alert('세션이 저장되었습니다.');
+  };
+
+  return (
+    <Button variant="contained" color="secondary" onClick={handleSaveSession}>
+      세션 저장하기
+    </Button>
+  );
+};
+
+// LoadDocumentButton 컴포넌트 (문서 불러오기 버튼)
+const LoadDocumentButton: React.FC<{ documentId: string }> = ({ documentId }) => {
+  const editor = useEditor();
+
+  const handleLoadDocument = async () => {
     if (!editor) return;
 
     try {
       const document = await loadDocumentState(documentId);
-      const session = await loadSessionState(documentId, userId);
-      editor.setCurrentTool('select'); // 도구 상태를 리셋
-      loadSnapshot(editor.store, { document, session });
+      editor.setCurrentTool('select');
+      loadSnapshot(editor.store, { document });
     } catch (error) {
-      console.error('Error loading state:', error);
+      console.error('Error loading document:', error);
     }
     alert('문서가 로드되었습니다.');
   };
 
   return (
-    <Button variant="contained" color="primary" onClick={handleLoad}>
-      불러오기
+    <Button variant="contained" color="primary" onClick={handleLoadDocument}>
+      문서 불러오기
+    </Button>
+  );
+};
+
+// LoadSessionButton 컴포넌트 (세션 불러오기 버튼)
+const LoadSessionButton: React.FC<{ documentId: string; userId: string }> = ({ documentId, userId }) => {
+  const editor = useEditor();
+
+  const handleLoadSession = async () => {
+    if (!editor) return;
+
+    try {
+      const session = await loadSessionState(documentId, userId);
+      editor.setCurrentTool('select');
+      loadSnapshot(editor.store, { session });
+    } catch (error) {
+      console.error('Error loading session:', error);
+    }
+    alert('세션이 로드되었습니다.');
+  };
+
+  return (
+    <Button variant="contained" color="secondary" onClick={handleLoadSession}>
+      세션 불러오기
     </Button>
   );
 };
@@ -60,11 +109,19 @@ const TldrawComponent: React.FC = () => {
       <Tldraw persistenceKey="my-persistence-key">
         <Box sx={{ mt: 2 }}>
           <Grid container justifyContent="center" spacing={2}>
+            {/* 서버 저장 및 불러오기 */}
             <Grid item>
-              <SaveButton documentId="my-document-id" userId="my-user-id" />
+              <SaveDocumentButton documentId="my-document-id" />
             </Grid>
             <Grid item>
-              <LoadButton documentId="my-document-id" userId="my-user-id" />
+              <LoadDocumentButton documentId="my-document-id" />
+            </Grid>
+            {/* 세션 저장 및 불러오기 */}
+            <Grid item>
+              <SaveSessionButton documentId="my-document-id" userId="my-user-id" />
+            </Grid>
+            <Grid item>
+              <LoadSessionButton documentId="my-document-id" userId="my-user-id" />
             </Grid>
           </Grid>
         </Box>
@@ -75,22 +132,55 @@ const TldrawComponent: React.FC = () => {
 
 export default TldrawComponent;
 
-// 상태 저장 로직
+// 서버로 문서 상태 저장
 async function saveDocumentState(documentId: string, document: any) {
-  localStorage.setItem(`${documentId}-document`, JSON.stringify(document));
+  try {
+    const response = await axios.post('http://localhost:5000/api/save-document', {
+      documentId,
+      document,
+    });
+    if (response.status !== 200) {
+      throw new Error('Failed to save document');
+    }
+  } catch (error) {
+    console.error('Error saving document:', error);
+  }
 }
 
+// 서버로 세션 상태 저장
 async function saveSessionState(documentId: string, userId: string, session: any) {
-  localStorage.setItem(`${documentId}-${userId}-session`, JSON.stringify(session));
+  try {
+    const response = await axios.post('http://localhost:5000/api/save-session', {
+      documentId,
+      userId,
+      session,
+    });
+    if (response.status !== 200) {
+      throw new Error('Failed to save session');
+    }
+  } catch (error) {
+    console.error('Error saving session:', error);
+  }
 }
 
-// 상태 불러오기 로직
+// 서버에서 문서 상태 불러오기
 async function loadDocumentState(documentId: string): Promise<any> {
-  const savedDocument = localStorage.getItem(`${documentId}-document`);
-  return savedDocument ? JSON.parse(savedDocument) : null;
+  try {
+    const response = await axios.get(`http://localhost:5000/api/load-document/${documentId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error loading document:', error);
+    throw error;
+  }
 }
 
+// 서버에서 세션 상태 불러오기
 async function loadSessionState(documentId: string, userId: string): Promise<any> {
-  const savedSession = localStorage.getItem(`${documentId}-${userId}-session`);
-  return savedSession ? JSON.parse(savedSession) : null;
+  try {
+    const response = await axios.get(`http://localhost:5000/api/load-session/${documentId}/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error loading session:', error);
+    throw error;
+  }
 }
