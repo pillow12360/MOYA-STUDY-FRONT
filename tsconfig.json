@@ -28,7 +28,8 @@
       "module": "commonjs",
       "moduleResolution": "Node",
       "target": "es5",
-      "esModuleInterop": true
+      "esModuleInterop": true,
+      "@tldraw/sync": ["src/types/tldraw-sync.d.ts"]
     },
     "include": ["src"]
   }
