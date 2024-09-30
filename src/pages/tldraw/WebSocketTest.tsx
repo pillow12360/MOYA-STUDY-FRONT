@@ -48,6 +48,7 @@ const WebSocketTest: React.FC = () => {
       // 메시지를 JSON 형식으로 서버에 전송
       socketRef.current.send(JSON.stringify({ message }));
       setMessage(''); // 메시지 전송 후 입력 필드를 비움
+      alert('sent message');
     }
   };
 
