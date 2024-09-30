@@ -21,6 +21,7 @@ import Dashboard from './pages/DashBoard/DashBoard';
 import Calendar from './pages/Calendar/Calendar';
 import TldrawComponent from '@pages/tldraw/TldrawComponent';
 import TldrawClient from '@pages/tldraw/template/client/TldrawClient';
+import WebSocketTest from '@pages/tldraw/WebSocketTest';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -94,6 +95,7 @@ const App: React.FC = () => {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/tldraw" element={<TldrawComponent />} />
             <Route path="/tldrawtest" element={<TldrawClient />} />
+            <Route path="/websockettest" element={<WebSocketTest />} />
           </Routes>
         </Box>
         <Footer mode={mode} toggleColorMode={toggleColorMode} />

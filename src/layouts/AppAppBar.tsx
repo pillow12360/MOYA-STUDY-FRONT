@@ -102,6 +102,9 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               <MenuItem component={Link} to="/tldrawtest">
                 Tldraw Template
               </MenuItem>
+              <MenuItem component={Link} to="/websockettest">
+                WebSocket Test
+              </MenuItem>
             </Box>
 
             {/* 사용자 메뉴 및 로그인 버튼: 오른쪽에 위치 */}
