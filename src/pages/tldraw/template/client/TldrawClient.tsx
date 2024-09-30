@@ -5,13 +5,13 @@ import { AssetRecordType, getHashForString, TLAssetStore, TLBookmarkAsset, Tldra
 const WORKER_URL = `http://localhost:5858`;
 
 // 이 예시에서는 방 ID가 하드코딩되어 있습니다. 물론 이를 원하는 방식으로 설정할 수 있습니다.
-const roomId = 'test-room';
+// const roomId = 'test-room';
 
 function TldrawClient() {
   // 멀티플레이어와 연결된 스토어를 생성합니다.
   const store = useSync({
     // 웹소켓의 URI를 알아야 합니다...
-    uri: `${WORKER_URL}/connect/${roomId}`,
+    uri: `${WORKER_URL}/connect/1`,
     // ...그리고 이미지 및 비디오와 같은 정적 자산을 어떻게 처리할지 정의해야 합니다.
     assets: multiplayerAssets,
   });
@@ -26,7 +26,7 @@ function TldrawClient() {
           // @ts-expect-error
           window.editor = editor;
           // 에디터가 준비되면 북마크 unfurling(확장) 서비스를 등록해야 합니다.
-          editor.registerExternalAssetHandler('url', unfurlBookmarkUrl);
+          // editor.registerExternalAssetHandler('url', unfurlBookmarkUrl);
         }}
       />
     </div>
@@ -61,34 +61,34 @@ const multiplayerAssets: TLAssetStore = {
 };
 
 // 서버는 북마크 unfurling(확장)을 어떻게 처리하나요?
-async function unfurlBookmarkUrl({ url }: { url: string }): Promise<TLBookmarkAsset> {
-  const asset: TLBookmarkAsset = {
-    id: AssetRecordType.createId(getHashForString(url)),
-    typeName: 'asset',
-    type: 'bookmark',
-    meta: {},
-    props: {
-      src: url,
-      description: '',
-      image: '',
-      favicon: '',
-      title: '',
-    },
-  };
-
-  try {
-    const response = await fetch(`${WORKER_URL}/unfurl?url=${encodeURIComponent(url)}`);
-    const data = await response.json();
-
-    asset.props.description = data?.description ?? '';
-    asset.props.image = data?.image ?? '';
-    asset.props.favicon = data?.favicon ?? '';
-    asset.props.title = data?.title ?? '';
-  } catch (e) {
-    console.error(e);
-  }
-
-  return asset;
-}
+// async function unfurlBookmarkUrl({ url }: { url: string }): Promise<TLBookmarkAsset> {
+//   const asset: TLBookmarkAsset = {
+//     id: AssetRecordType.createId(getHashForString(url)),
+//     typeName: 'asset',
+//     type: 'bookmark',
+//     meta: {},
+//     props: {
+//       src: url,
+//       description: '',
+//       image: '',
+//       favicon: '',
+//       title: '',
+//     },
+//   };
+//
+//   try {
+//     const response = await fetch(`${WORKER_URL}/unfurl?url=${encodeURIComponent(url)}`);
+//     const data = await response.json();
+//
+//     asset.props.description = data?.description ?? '';
+//     asset.props.image = data?.image ?? '';
+//     asset.props.favicon = data?.favicon ?? '';
+//     asset.props.title = data?.title ?? '';
+//   } catch (e) {
+//     console.error(e);
+//   }
+//
+//   return asset;
+// }
 
 export default TldrawClient;
