@@ -1,7 +1,7 @@
 import { useSync } from '@tldraw/sync';
 import React from 'react';
 import { AssetRecordType, getHashForString, TLAssetStore, TLBookmarkAsset, Tldraw, uniqueId } from 'tldraw';
-const WORKER_URL = `http://localhost:5858`;
+const WORKER_URL = `http://localhost:5172`;
 import 'tldraw/tldraw.css';
 // In this example, the room ID is hard-coded. You can set this however you like though.
 const roomId = 'test-room';
