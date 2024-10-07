@@ -1,7 +1,7 @@
 import { useSync } from '@tldraw/sync';
 import React from 'react';
 import { AssetRecordType, getHashForString, TLAssetStore, TLBookmarkAsset, Tldraw, uniqueId } from 'tldraw';
-const WORKER_URL = `http://localhost:5172`;
+const WORKER_URL = `https://tldraw-worker.pillow12360.workers.dev`;
 import 'tldraw/tldraw.css';
 // In this example, the room ID is hard-coded. You can set this however you like though.
 const roomId = 'test-room';
@@ -16,7 +16,7 @@ function App() {
   });
 
   return (
-    <div style={{ position: 'fixed', inset: 0 }}>
+    <div style={{ position: 'fixed', inset: 0, marginTop: '10vh', marginBottom: '5vh' }}>
       <Tldraw
         store={store}
         onMount={(editor) => {
