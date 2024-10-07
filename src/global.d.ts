@@ -1,5 +1,7 @@
-// src/global.d.ts
-declare module '*.scss' {
-  const content: { [className: string]: string };
-  export default content;
+import { TldrawApp } from '@tldraw/tldraw';
+
+declare global {
+  interface Window {
+    editor: TldrawApp; // window 객체에 editor 속성 추가
+  }
 }

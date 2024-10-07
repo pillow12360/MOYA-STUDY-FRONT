@@ -6,6 +6,7 @@
     "jsx": "react",
     "module": "esnext",
     "moduleResolution": "Node",
+    "skipLibCheck": true,
     "target": "es5",
     "strict": true,
     "resolveJsonModule": true,
