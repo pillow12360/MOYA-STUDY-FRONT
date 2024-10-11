@@ -98,6 +98,9 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               <MenuItem component={Link} to="/tldraw">
                 Tldraw
               </MenuItem>
+                <MenuItem component={Link} to="/moya">
+                    Moya
+                </MenuItem>
             </Box>
 
             {/* 사용자 메뉴 및 로그인 버튼: 오른쪽에 위치 */}
