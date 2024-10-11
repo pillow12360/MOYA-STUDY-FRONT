@@ -20,7 +20,7 @@ import { Provider } from 'react-redux';
 import Dashboard from './pages/DashBoard/DashBoard';
 import Calendar from './pages/Calendar/Calendar';
 import TldrawComponent from '@pages/tldraw/TldrawComponent';
-import DiscordLight from "@pages/moya/main/DiscordLight";
+import DiscordLight from "@pages/Moya/main/DiscordLight";
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
