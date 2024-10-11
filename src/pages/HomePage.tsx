@@ -33,10 +33,10 @@ const HomePage = ({ mode, toggleColorMode }: HomePageProps) => {
       >
         <Container>
           <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
-            Team-ICT(임시) 2024.09
+            MOYA Study
           </Typography>
           <Typography variant="h5" sx={{ marginBottom: '20px' }}>
-            프로젝트 시작
+            2024.09 ~ 2024.12
           </Typography>
         </Container>
       </Box>

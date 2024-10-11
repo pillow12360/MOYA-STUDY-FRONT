@@ -85,10 +85,9 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   fontWeight: 'bold',
                 }}
               >
-                ICT
+                MOYA
               </Typography>
             </Box>
-
             <Box
               sx={{
                 flexGrow: 1,
