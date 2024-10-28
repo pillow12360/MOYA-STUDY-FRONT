@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { PaletteMode } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -14,8 +15,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@store/Store'; // Redux 스토어에서 RootState를 가져옵니다.
-import { logout } from '@store/slices/AuthSlice'; // 로그아웃 액션을 가져옵니다.
+import { RootState } from '@store/Store';
+import { logout } from '@store/slices/AuthSlice';
 import UserMenu from './UserMenu';
 
 interface AppAppBarProps {
@@ -33,11 +34,31 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
   };
 
   const handleLogout = () => {
-    dispatch(logout()); // 로그아웃 액션을 디스패치합니다.
+    dispatch(logout());
   };
 
+  // 스크롤 상태를 감지하여 투명도를 조정하기 위한 상태
+  const [scrollY, setScrollY] = useState(0);
+
+  const handleScroll = () => {
+    setScrollY(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <div>
+    <Box
+      sx={{
+        // 모든 컨텐츠의 반투명도를 스크롤에 따라 조정
+        opacity: Math.max(0.3, 1 - scrollY / 300), // 스크롤 값에 따라 투명도 변경 (최소 0.3)
+        transition: 'opacity 0.3s ease',
+      }}
+    >
       <AppBar
         position="fixed"
         sx={{
@@ -67,7 +88,6 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   : '0 0 1px rgba(2, 31, 59, 0.7), 1px 1.5px 2px -1px rgba(2, 31, 59, 0.65), 4px 4px 12px -2.5px rgba(2, 31, 59, 0.65)',
             })}
           >
-            {/* 프로젝트 이름: 중앙 정렬 */}
             <Box
               sx={{
                 flexGrow: 1,
@@ -88,6 +108,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 MOYA
               </Typography>
             </Box>
+
             <Box
               sx={{
                 flexGrow: 1,
@@ -98,12 +119,11 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               <MenuItem component={Link} to="/tldraw">
                 Tldraw
               </MenuItem>
-                <MenuItem component={Link} to="/moya">
-                    Moya
-                </MenuItem>
+              <MenuItem component={Link} to="/moya">
+                Moya
+              </MenuItem>
             </Box>
 
-            {/* 사용자 메뉴 및 로그인 버튼: 오른쪽에 위치 */}
             <Box
               sx={{
                 display: 'flex',
@@ -115,15 +135,12 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               {user ? (
                 <UserMenu />
               ) : (
-                <>
-                  <Button color="primary" variant="text" size="small" component={Link} to="/signin">
-                    Login
-                  </Button>
-                </>
+                <Button color="primary" variant="text" size="small" component={Link} to="/signin">
+                  Login
+                </Button>
               )}
             </Box>
 
-            {/* 햄버거 메뉴 버튼 (오른쪽) - 다크/라이트 모드에 맞게 색상 변경 */}
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
               <IconButton
                 edge="end"
@@ -137,7 +154,6 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               </IconButton>
             </Box>
 
-            {/* 오른쪽에 있는 Drawer */}
             <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
               <Box
                 sx={{
@@ -157,7 +173,6 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 >
                   <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
                 </Box>
-                {/* Drawer 메뉴를 react-router-dom의 Link 컴포넌트로 변경 */}
                 <MenuItem component={Link} to="/tldraw">
                   Tldraw
                 </MenuItem>
@@ -168,20 +183,18 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                     <UserMenu />
                   </MenuItem>
                 ) : (
-                  <>
-                    <MenuItem>
-                      <Button color="primary" variant="outlined" component={Link} to="/signin" sx={{ width: '100%' }}>
-                        Login
-                      </Button>
-                    </MenuItem>
-                  </>
+                  <MenuItem>
+                    <Button color="primary" variant="outlined" component={Link} to="/signin" sx={{ width: '100%' }}>
+                      Login
+                    </Button>
+                  </MenuItem>
                 )}
               </Box>
             </Drawer>
           </Toolbar>
         </Container>
       </AppBar>
-    </div>
+    </Box>
   );
 }
 
