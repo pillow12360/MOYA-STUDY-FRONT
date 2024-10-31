@@ -21,7 +21,7 @@ import Dashboard from './pages/DashBoard/DashBoard';
 import Calendar from './pages/Calendar/Calendar';
 import TldrawComponent from '@pages/tldraw/TldrawComponent';
 import DiscordLight from "@pages/Moya/DiscordLight";
-import AppContainer from '@pages/Moya/Component/AppContainer';
+import {Moya} from '@pages/Moya/Component/Moya';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -94,7 +94,7 @@ const App: React.FC = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/tldraw" element={<TldrawComponent />} />
-            <Route path="/moya" element={<AppContainer  />} />
+            <Route path="/moya" element={<Moya  />} />
           </Routes>
         </Box>
         <Footer mode={mode} toggleColorMode={toggleColorMode} />

@@ -1,29 +1,39 @@
-import React from "react";
-import { Box, Typography, IconButton, Avatar } from "@mui/material";
-import { Gif, InsertEmoticon, Image } from "@mui/icons-material";
+import { Box, Typography, IconButton, Avatar } from '@mui/material';
+import { Gif, InsertEmoticon, Image } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+import React from 'react';
 
-export const MessageInput = (): JSX.Element => {
+const InputContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(1, 2),
+  backgroundColor: '#ebedef',
+  margin: theme.spacing(2),
+  borderRadius: theme.shape.borderRadius,
+}));
+
+const MessageInput = () => {
   return (
-    <Box display="flex" alignItems="center" px={2} py={1} bgcolor="#ebedef">
-  <IconButton>
-    <Avatar src="/div-icon.svg" />
-    </IconButton>
-    <Box flexGrow={1} display="flex" alignItems="center" pl={1}>
-  <Typography variant="body1" color="#747f8d" fontFamily="Helvetica">
-    Message #general
-  </Typography>
-  </Box>
-  <IconButton>
-  <Gif />
-  </IconButton>
-  <IconButton>
-  <Image />
-  </IconButton>
-  <IconButton>
-  <InsertEmoticon />
-  </IconButton>
-  </Box>
-);
+    <InputContainer>
+      <IconButton size="small">
+        <Avatar src="/api/placeholder/32/32" sx={{ width: 24, height: 24 }} />
+      </IconButton>
+      <Box flexGrow={1} display="flex" alignItems="center" pl={1}>
+        <Typography variant="body1" color="text.secondary">
+          Message #general
+        </Typography>
+      </Box>
+      <IconButton size="small">
+        <Gif />
+      </IconButton>
+      <IconButton size="small">
+        <Image />
+      </IconButton>
+      <IconButton size="small">
+        <InsertEmoticon />
+      </IconButton>
+    </InputContainer>
+  );
 };
 
 export default MessageInput;

@@ -1,54 +1,69 @@
-import React from "react";
-import { Box, Typography, IconButton, Divider, TextField, InputAdornment } from "@mui/material";
-import { Search, Settings, Mic, Headset, ExitToApp, Tag, Gif, InsertEmoticon, Image } from "@mui/icons-material";
-import MessageInput from "./MessageInput";
 
-export const MainChatArea = (): JSX.Element => {
+import { Box, Typography, IconButton, Divider, TextField, InputAdornment } from '@mui/material';
+import { Search, Settings, Mic, Headset, ExitToApp, Tag } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+import MessageInput from './MessageInput';
+import React from 'react';
+
+const ChatContainer = styled(Box)(() => ({
+  flex: 1,
+  height: '100%',
+  backgroundColor: 'white',
+}));
+
+const ChatHeader = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: theme.spacing(1, 2),
+  backgroundColor: 'white',
+}));
+
+const MainChatArea = () => {
   return (
-    <Box flex="1" height="100%" bgcolor="white">
-  <Box display="flex" flexDirection="column" height="100%">
-  <Box display="flex" justifyContent="space-between" alignItems="center" px={2} py={1} bgcolor="white">
-  <Box display="flex" alignItems="center">
-    <IconButton>
-      <Tag />
-    </IconButton>
-    <Typography variant="h6" color="#060607" fontFamily="Helvetica" fontWeight="bold">
-    general
-    </Typography>
-    </Box>
-    <Box display="flex" alignItems="center">
-  <TextField
-    variant="outlined"
-  size="small"
-  placeholder="Search"
-  InputProps={{
-    startAdornment: (
-      <InputAdornment position="start">
-        <Search />
-        </InputAdornment>
-    ),
-  }}
-  />
-  <IconButton>
-  <Settings />
-  </IconButton>
-  <IconButton>
-  <Mic />
-  </IconButton>
-  <IconButton>
-  <Headset />
-  </IconButton>
-  <IconButton>
-  <ExitToApp />
-  </IconButton>
-  </Box>
-  </Box>
-  <Divider />
-  <Box flexGrow={1} />
-  <MessageInput />
-  </Box>
-  </Box>
-);
+    <ChatContainer>
+      <Box display="flex" flexDirection="column" height="100%">
+        <ChatHeader>
+          <Box display="flex" alignItems="center">
+            <IconButton size="small">
+              <Tag />
+            </IconButton>
+            <Typography variant="h6" color="text.primary" fontWeight="bold">
+              general
+            </Typography>
+          </Box>
+          <Box display="flex" alignItems="center" gap={1}>
+            <TextField
+              size="small"
+              placeholder="Search"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search fontSize="small" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <IconButton size="small">
+              <Settings />
+            </IconButton>
+            <IconButton size="small">
+              <Mic />
+            </IconButton>
+            <IconButton size="small">
+              <Headset />
+            </IconButton>
+            <IconButton size="small">
+              <ExitToApp />
+            </IconButton>
+          </Box>
+        </ChatHeader>
+        <Divider />
+        <Box flexGrow={1} />
+        <MessageInput />
+      </Box>
+    </ChatContainer>
+  );
 };
 
 export default MainChatArea;
