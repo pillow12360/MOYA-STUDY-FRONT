@@ -5,21 +5,16 @@ import getMoyaTheme from './themes/getMoyaTheme';
 import React from 'react';
 import AboutPage from './pages/AboutPage';
 import HomePage from './pages/HomePage';
-import ProjectPage from './pages/ProjectPage';
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
 import Footer from './layouts/Footer';
 import AppAppBar from './layouts/AppAppBar';
 import { PaletteMode } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import ToggleButton from '@mui/material/ToggleButton';
-import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import getLPTheme from './themes/getLPTheme';
 import store from '@store/Store';
 import { Provider } from 'react-redux';
 import Dashboard from './pages/DashBoard/DashBoard';
-import Calendar from './pages/Calendar/Calendar';
 import TldrawComponent from '@pages/tldraw/TldrawComponent';
 import {Moya} from '@pages/Moya/Component/Moya';
 
@@ -57,11 +52,9 @@ const AppContent: React.FC<AppContentProps> = ({ mode, toggleColorMode }) => {
       <Routes>
         <Route path="/" element={<HomePage mode={mode} toggleColorMode={toggleColorMode} />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/project" element={<ProjectPage />} />
-        <Route path="/SignIn" element={<SignIn />} />
+         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/calendar" element={<Calendar />} />
         <Route path="/tldraw" element={<TldrawComponent />} />
         <Route
           path="/moya"
