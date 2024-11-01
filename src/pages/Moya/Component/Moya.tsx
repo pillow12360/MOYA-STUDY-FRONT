@@ -1,27 +1,25 @@
-
-// components/Moya.tsx
+import React from 'react';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Sidebar from './Sidebar';
 import ChannelList from './ChannelList';
 import MainChatArea from './MainChatArea';
-import React from 'react';
 
-const RootContainer = styled(Box)(({ theme }) => ({
+const RootContainer = styled('div')({
   display: 'flex',
-  justifyContent: 'center',
-  width: '100%',
-  minHeight: '100vh',
-  backgroundColor: theme.palette.background.default,
+  width: '100vw',
+  height: '100vh',
   overflow: 'hidden',
-}));
+  position: 'fixed',
+  top: 0,
+  left: 0,
+});
 
-const ContentContainer = styled(Box)(() => ({
+const ContentContainer = styled(Box)({
   display: 'flex',
   width: '100%',
-  maxWidth: '1920px',
-  height: '90vh',
-}));
+  height: '100%',
+});
 
 export const Moya = () => {
   return (

@@ -1,36 +1,43 @@
+import React from 'react';
 import { Box, Avatar, Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React from 'react';
 
 const SidebarContainer = styled(Box)(({ theme }) => ({
-  width: 72,
-  height: '100%',
-  backgroundColor: theme.palette.background.default,
+  width: '72px',
+  height: '100vh',
+  backgroundColor: theme.palette.mode === 'light' ? '#e3e5e8' : '#202225',
+  padding: '12px 0',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '8px',
 }));
 
 const ServerAvatar = styled(Avatar)(({ theme }) => ({
   width: 48,
   height: 48,
-  backgroundColor: 'white',
-  borderRadius: theme.spacing(1.5),
-  margin: theme.spacing(2, 0),
+  backgroundColor: theme.palette.mode === 'light' ? '#ffffff' : '#36393f',
+  borderRadius: '50%',
   cursor: 'pointer',
-  transition: 'all 0.2s',
+  transition: 'all 0.2s ease',
   '&:hover': {
-    borderRadius: theme.spacing(2),
+    borderRadius: '16px',
     backgroundColor: theme.palette.primary.main,
   },
 }));
 
+const StyledDivider = styled(Divider)({
+  width: '32px',
+  margin: '4px 0',
+});
+
 const Sidebar = () => {
   return (
     <SidebarContainer>
-      <Box display="flex" flexDirection="column" alignItems="center">
-        <ServerAvatar src="/api/placeholder/48/48" />
-        <Divider flexItem />
-        <ServerAvatar src="/api/placeholder/48/48" />
-        <ServerAvatar src="/api/placeholder/48/48" />
-      </Box>
+      <ServerAvatar src="/api/placeholder/48/48" />
+      <StyledDivider />
+      <ServerAvatar src="/api/placeholder/48/48" />
+      <ServerAvatar src="/api/placeholder/48/48" />
     </SidebarContainer>
   );
 };
