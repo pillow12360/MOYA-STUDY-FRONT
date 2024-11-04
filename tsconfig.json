@@ -21,7 +21,8 @@
       "@contexts/*": ["src/contexts/*"],
       "@components/*": ["src/components/*"],
       "@themes/*": ["src/themes/*"],
-      "@store/*": ["src/store/*"]
+      "@store/*": ["src/store/*"],
+      "@services/*": ["src/services/*"],
     }
   },
   "ts-node": {

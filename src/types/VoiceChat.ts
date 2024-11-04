@@ -56,3 +56,4 @@ export interface AudioState {
   isMuted: boolean;
   error?: string;
 }
+
