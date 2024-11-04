@@ -1,0 +1,230 @@
+import { VoiceChatEvent, PeerConnection, SignalingMessage } from '../types/voiceChat';
+import {WS_ROUTES} from 'src/config/apiConfig'
+
+export class VoiceChatServiceRoom {
+  private static instance: VoiceChatService;
+  private peerConnections: Map<string, RTCPeerConnection> = new Map();
+  private localStream: MediaStream | null = null;
+  private socket: WebSocket | null = null;
+  private userId: string = '';
+  private roomId: string = '';
+
+
+  // STUN 서버 설정
+  private configuration: RTCConfiguration = {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+    ]
+  };
+
+  private constructor() {}
+
+  public static getInstance(): VoiceChatService {
+    if (!VoiceChatService.instance) {
+      VoiceChatService.instance = new VoiceChatService();
+    }
+    return VoiceChatService.instance;
+  }
+
+  public async initialize(userId: string, roomId: string): Promise<void> {
+    this.userId = userId;
+    this.roomId = roomId;
+    await this.setupLocalStream();
+    this.connectSignalingServer();
+  }
+
+  private async setupLocalStream(): Promise<void> {
+    try {
+      this.localStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: false
+      });
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+      throw error;
+    }
+  }
+
+  private connectSignalingServer(): void {
+    // WS_ROUTES.VOICE 엔드포인트로 연결
+    this.socket = new WebSocket(`${WS_ROUTES.VOICE}?userId=${this.userId}&roomId=${this.roomId}`);
+
+    this.socket.onopen = () => {
+      this.sendToSignalingServer({
+        type: 'JOIN',
+        from: this.userId,
+        roomId: this.roomId
+      });
+    };
+
+    this.socket.onmessage = (event) => {
+      const message: SignalingMessage = JSON.parse(event.data);
+      this.handleSignalingMessage(message);
+    };
+
+    this.socket.onerror = (error) => {
+      console.error('WebSocket connection error:', error);
+    };
+
+    this.socket.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+  }
+
+  private async handleSignalingMessage(message: SignalingMessage): Promise<void> {
+    switch (message.type) {
+      case 'USER_JOINED':
+        await this.createPeerConnection(message.from);
+        break;
+
+      case 'OFFER':
+        await this.handleOffer(message);
+        break;
+
+      case 'ANSWER':
+        await this.handleAnswer(message);
+        break;
+
+      case 'ICE_CANDIDATE':
+        await this.handleIceCandidate(message);
+        break;
+
+      case 'USER_LEFT':
+        this.handleUserLeft(message.from);
+        break;
+    }
+  }
+
+  private async createPeerConnection(remoteUserId: string): Promise<void> {
+    const peerConnection = new RTCPeerConnection(this.configuration);
+
+    // 로컬 스트림 추가
+    this.localStream?.getTracks().forEach(track => {
+      this.localStream && peerConnection.addTrack(track, this.localStream);
+    });
+
+    // ICE candidate 이벤트 처리
+    peerConnection.onicecandidate = (event) => {
+      if (event.candidate) {
+        this.sendToSignalingServer({
+          type: 'ICE_CANDIDATE',
+          from: this.userId,
+          to: remoteUserId,
+          candidate: event.candidate
+        });
+      }
+    };
+
+    // 원격 스트림 처리
+    peerConnection.ontrack = (event) => {
+      this.handleRemoteStream(remoteUserId, event.streams[0]);
+    };
+
+    this.peerConnections.set(remoteUserId, peerConnection);
+
+    // Offer 생성 및 전송
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+
+    this.sendToSignalingServer({
+      type: 'OFFER',
+      from: this.userId,
+      to: remoteUserId,
+      sdp: offer
+    });
+  }
+
+  private async handleOffer(message: SignalingMessage): Promise<void> {
+    if (!message.sdp || !message.from) return;
+
+    const peerConnection = new RTCPeerConnection(this.configuration);
+    this.peerConnections.set(message.from, peerConnection);
+
+    // 로컬 스트림 추가
+    this.localStream?.getTracks().forEach(track => {
+      this.localStream && peerConnection.addTrack(track, this.localStream);
+    });
+
+    // 원격 Description 설정
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(message.sdp));
+
+    // Answer 생성 및 전송
+    const answer = await peerConnection.createAnswer();
+    await peerConnection.setLocalDescription(answer);
+
+    this.sendToSignalingServer({
+      type: 'ANSWER',
+      from: this.userId,
+      to: message.from,
+      sdp: answer
+    });
+  }
+
+  private async handleAnswer(message: SignalingMessage): Promise<void> {
+    if (!message.sdp || !message.from) return;
+
+    const peerConnection = this.peerConnections.get(message.from);
+    if (peerConnection) {
+      await peerConnection.setRemoteDescription(new RTCSessionDescription(message.sdp));
+    }
+  }
+
+  private async handleIceCandidate(message: SignalingMessage): Promise<void> {
+    if (!message.candidate || !message.from) return;
+
+    const peerConnection = this.peerConnections.get(message.from);
+    if (peerConnection) {
+      await peerConnection.addIceCandidate(new RTCIceCandidate(message.candidate));
+    }
+  }
+
+  private handleUserLeft(userId: string): void {
+    const peerConnection = this.peerConnections.get(userId);
+    if (peerConnection) {
+      peerConnection.close();
+      this.peerConnections.delete(userId);
+    }
+  }
+
+  private sendToSignalingServer(message: any): void {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(JSON.stringify(message));
+    }
+  }
+
+  private handleRemoteStream(userId: string, stream: MediaStream): void {
+    // 원격 스트림을 처리하는 콜백 실행
+    this.onRemoteStream?.(userId, stream);
+  }
+
+  public onRemoteStream?: (userId: string, stream: MediaStream) => void;
+
+  public setMute(muted: boolean): void {
+    this.localStream?.getAudioTracks().forEach(track => {
+      track.enabled = !muted;
+    });
+  }
+
+  public disconnect(): void {
+    // 모든 연결 종료
+    this.peerConnections.forEach(connection => {
+      connection.close();
+    });
+    this.peerConnections.clear();
+
+    // 로컬 스트림 정리
+    this.localStream?.getTracks().forEach(track => {
+      track.stop();
+    });
+    this.localStream = null;
+
+    // 웹소켓 연결 종료
+    if (this.socket) {
+      this.socket.close();
+      this.socket = null;
+    }
+  }
+}
+
+export default VoiceChatService.getInstance();
